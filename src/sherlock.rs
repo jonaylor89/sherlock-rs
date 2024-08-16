@@ -3,6 +3,7 @@ use crate::{
     query_result::{QueryResult, QueryStatus},
     sherlock_target_manifest::{ErrorType, RequestMethod, TargetInfo},
 };
+use color_eyre::eyre;
 use regex::Regex;
 use reqwest::{
     header::{HeaderMap, HeaderName, HeaderValue},
@@ -14,7 +15,7 @@ use std::{
     time::{Duration, Instant},
 };
 use thiserror::Error;
-use tokio::sync::mpsc::Sender;
+use tokio::sync::mpsc::{channel, Sender};
 
 #[derive(Error, Debug)]
 pub enum QueryError {
@@ -39,27 +40,31 @@ pub async fn check_username(
     site_data: HashMap<String, TargetInfo>,
 ) -> color_eyre::Result<Vec<QueryResult>> {
     let num_of_sites = site_data.keys().len();
-    let (tx, mut rx) = tokio::sync::mpsc::channel::<RequestResult>(num_of_sites);
+    if num_of_sites == 0 {
+        return Err(eyre::eyre!("No sites to check"));
+    }
+
+    let (tx, mut rx) = channel::<RequestResult>(num_of_sites);
 
     // ping sites for username matches
-    let mut tasks = vec![];
     for (site, info) in site_data.into_iter() {
         let sender = tx.clone();
         let username_clone = username.clone();
 
-        let task = add_result_to_channel(username_clone, site, info, sender);
-        tasks.push(task);
+        add_result_to_channel(username_clone, site, info, sender)?;
     }
+
+    drop(tx);
 
     // save to output data struct
     let mut results = vec![];
     while let Some(result) = rx.recv().await {
-        println!("{:?}", result);
-
         let site = result.site;
         let info = result.info;
         let url = result.url;
         let username = result.username;
+
+        println!("{}", site);
 
         match result.response {
             Err(e) => {
@@ -145,10 +150,6 @@ pub async fn check_username(
         };
     }
 
-    for task in tasks {
-        task.await??;
-    }
-
     Ok(results)
 }
 
@@ -157,7 +158,7 @@ pub fn add_result_to_channel(
     site: String,
     info: TargetInfo,
     sender: Sender<RequestResult>,
-) -> tokio::task::JoinHandle<color_eyre::Result<()>> {
+) -> color_eyre::Result<()> {
     let encoded_username = &username.replace(" ", "%20");
     let url = match &info.url_probe {
         // There is a special URL for probing existence separate
@@ -166,7 +167,7 @@ pub fn add_result_to_channel(
         None => info.url.interpolate(encoded_username),
     };
 
-    let task = tokio::spawn(async move {
+    tokio::spawn(async move {
         // use regex to make sure the url and username are valid for the site
         if let Some(regex) = &info.regex_check {
             let re = Regex::new(regex).unwrap();
@@ -242,7 +243,7 @@ pub fn add_result_to_channel(
         Ok(())
     });
 
-    task
+    Ok(())
 }
 
 pub async fn make_request(
