@@ -33,7 +33,7 @@ async fn main() -> Result<()> {
     //          run sherlock
     //          output to txt, xlsx, etc
 
-    let results = check_username(username.into(), initial_data.targets).await?;
+    let _results = check_username(username.into(), initial_data.targets).await?;
 
     save_results(results)?;
 

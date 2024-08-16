@@ -136,6 +136,7 @@ pub async fn check_username(
                     }
                 };
 
+                println!("{}: {:?}", site, status);
                 results.push(QueryResult {
                     username: username.clone(),
                     site_name: site,
