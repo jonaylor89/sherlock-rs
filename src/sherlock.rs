@@ -26,12 +26,12 @@ pub enum QueryError {
 
 #[derive(Debug)]
 pub struct RequestResult {
-    username: String,
-    site: String,
-    info: TargetInfo,
-    url: String,
-    response: Result<Response, QueryError>,
-    query_time: Duration,
+    pub username: String,
+    pub site: String,
+    pub info: TargetInfo,
+    pub url: String,
+    pub response: Result<Response, QueryError>,
+    pub query_time: Duration,
 }
 
 pub async fn check_username(
@@ -42,11 +42,13 @@ pub async fn check_username(
     let (tx, mut rx) = tokio::sync::mpsc::channel::<RequestResult>(num_of_sites);
 
     // ping sites for username matches
+    let mut tasks = vec![];
     for (site, info) in site_data.into_iter() {
         let sender = tx.clone();
         let username_clone = username.clone();
 
-        add_result_to_channel(username_clone, site, info, sender).await?;
+        let task = add_result_to_channel(username_clone, site, info, sender);
+        tasks.push(task);
     }
 
     // save to output data struct
@@ -143,15 +145,19 @@ pub async fn check_username(
         };
     }
 
+    for task in tasks {
+        task.await??;
+    }
+
     Ok(results)
 }
 
-pub async fn add_result_to_channel(
+pub fn add_result_to_channel(
     username: String,
     site: String,
     info: TargetInfo,
     sender: Sender<RequestResult>,
-) -> color_eyre::Result<()> {
+) -> tokio::task::JoinHandle<color_eyre::Result<()>> {
     let encoded_username = &username.replace(" ", "%20");
     let url = match &info.url_probe {
         // There is a special URL for probing existence separate
@@ -160,7 +166,7 @@ pub async fn add_result_to_channel(
         None => info.url.interpolate(encoded_username),
     };
 
-    tokio::spawn(async move {
+    let task = tokio::spawn(async move {
         // use regex to make sure the url and username are valid for the site
         if let Some(regex) = &info.regex_check {
             let re = Regex::new(regex).unwrap();
@@ -236,7 +242,7 @@ pub async fn add_result_to_channel(
         Ok(())
     });
 
-    Ok(())
+    task
 }
 
 pub async fn make_request(
