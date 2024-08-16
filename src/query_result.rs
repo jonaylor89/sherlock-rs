@@ -3,11 +3,16 @@ use std::time::Duration;
 
 #[derive(Debug)]
 pub enum QueryStatus {
-    Claimed,   // username detected
-    Available, // username not detected
-    Unknown,   // error occured while trying to detect username
-    Illegal,   // username not allowed for this site
-    Waf,       // request blocked by waf (i.e. Cloudflare)
+    /// username detected
+    Claimed,
+    /// username not detected
+    Available,
+    /// error occured while trying to detect username
+    Unknown,
+    /// username not allowed for this site
+    Illegal,
+    /// request blocked by waf (i.e. Cloudflare)
+    Waf,
 }
 
 #[derive(Debug)]

@@ -4,7 +4,7 @@ use crate::{
     sherlock_target_manifest::{ErrorType, RequestMethod, TargetInfo},
 };
 use color_eyre::eyre;
-use regex::Regex;
+use fancy_regex::Regex;
 use reqwest::{
     header::{HeaderMap, HeaderName, HeaderValue},
     redirect::Policy,
@@ -64,8 +64,6 @@ pub async fn check_username(
         let url = result.url;
         let username = result.username;
 
-        println!("{}", site);
-
         match result.response {
             Err(e) => {
                 // results_site["status"] = QueryResult(
@@ -75,7 +73,7 @@ pub async fn check_username(
                 // results_site["http_status"] = ""
                 // results_site["response_text"] = ""
 
-                // TODO: this should change based on the erro
+                // TODO: this should change based on the error
                 // NotFound is for the username regex being bad
                 // but if it's another error, it should be unknown
                 results.push(QueryResult {
@@ -170,8 +168,9 @@ pub fn add_result_to_channel(
     tokio::spawn(async move {
         // use regex to make sure the url and username are valid for the site
         if let Some(regex) = &info.regex_check {
-            let re = Regex::new(regex).unwrap();
-            if !re.is_match(&username) {
+            let re = Regex::new(regex)?;
+            let is_match = re.is_match(&username)?;
+            if !is_match {
                 // No need to do the check at the site: this username is not allowed.
                 // results_site["status"] = QueryResult(
                 //   username, social_network, url, QueryStatus.ILLEGAL
@@ -223,7 +222,7 @@ pub fn add_result_to_channel(
             allow_redirects,
             Duration::from_secs(20),
             req_method,
-            info.request_payload.clone(),
+            // info.request_payload.clone(),
         )
         .await;
         let duration = start.elapsed();
@@ -252,7 +251,7 @@ pub async fn make_request(
     allow_redirects: bool,
     timeout: std::time::Duration,
     method: RequestMethod,
-    request_payload: Option<HashMap<String, String>>,
+    // request_payload: Option<Value>,
 ) -> color_eyre::Result<Response> {
     // make request
     let redirect_policy = match allow_redirects {

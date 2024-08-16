@@ -1,8 +1,8 @@
 use serde::{Deserialize, Serialize};
+use serde_json::Value;
 use std::collections::HashMap;
 
 #[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
 pub struct SherlockTargetManifest {
     #[serde(rename = "$schema")]
     pub schema: String,
@@ -31,7 +31,7 @@ pub struct TargetInfo {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub headers: Option<HashMap<String, String>>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    pub request_payload: Option<HashMap<String, String>>,
+    pub request_payload: Option<Value>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub __comment__: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
