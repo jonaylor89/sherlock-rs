@@ -4,6 +4,13 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+tokio = { version = "1.39.2", features = ["macros", "rt-multi-thread"] }
 clap = "4.5.15"
 color-eyre = "0.6.3"
-tokio = "1.39.2"
+reqwest = { version = "0.12.5", features = ["json"] }
+serde = { version = "1.0.208", features = ["derive"] }
+tokio-macros = "2.4.0"
+futures = "0.3.30"
+regex = "1.10.6"
+tokio-stream = "0.1.15"
+thiserror = "1.0.63"
