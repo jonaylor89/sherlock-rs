@@ -1,14 +1,4 @@
 
-todo
-- [x] get happy path working
-- [ ] get error handling working
-- [ ] add different output formats
-- [ ] add proxy support
-- [ ] add tor support
-- [ ] add tests
-- [ ] support all cli args
-- [ ] add docstrings
-
 # Sherlock
 
 the sherlock tool but writen in rust because I wanted a single binary
