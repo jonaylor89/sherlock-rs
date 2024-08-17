@@ -3,7 +3,6 @@ name = "sherlock-rs"
 description = "🔍 Hunt down social media accounts by username across social networks"
 author = ["Johannes Naylor <jonaylor89@gmail.com>"]
 license = "MIT"
-license-file = "LICENSE"
 version = "0.1.0"
 edition = "2021"
 readme = "README.md"
