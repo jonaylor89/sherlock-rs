@@ -99,9 +99,8 @@ async fn main() -> Result<()> {
     // let json_data = include_str!("../resources/data.json");
     let deserializer = &mut serde_json::Deserializer::from_str(&json_data);
     let initial_data: SherlockTargetManifest = serde_path_to_error::deserialize(deserializer)
-        .map_err(|err| {
-            println!("[!!!] error path [{}]", err.path().to_string());
-            err
+        .inspect_err(|err| {
+            println!("[!!!] error path [{}]", err.path());
         })?;
 
     for username in cli.usernames {

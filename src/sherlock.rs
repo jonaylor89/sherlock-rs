@@ -105,8 +105,7 @@ pub async fn check_username(
                 // here to filter results that fail to bypass WAFs. Fingerprints should
                 // be highly targetted. Comment at the end of each fingerprint to
                 // indicate target and date fingerprinted.
-                let wafhit_msgs = vec![
-                    // 2024-05-13 Cloudflare
+                let wafhit_msgs = [
                     r#".loading-spinner{visibility:hidden}body.no-js .challenge-running{display:none}body.dark{background-color:#222;color:#d9d9d9}body.dark a{color:#fff}body.dark a:hover{color:#ee730a;text-decoration:underline}body.dark .lds-ring div{border-color:#999 transparent transparent}body.dark .font-red{color:#b20f03}body.dark"#,
                     // 2024-04-09 PerimeterX / Human Security
                     r#"{return l.onPageView}}),Object.defineProperty(r,"perimeterxIdentifiers",{enumerable:"#,
@@ -134,7 +133,7 @@ pub async fn check_username(
                         if let Some(error_codes) = error_codes {
                             if error_codes.contains(&status_code) {
                                 status = QueryStatus::Available;
-                            } else if status_code >= 300 || status_code < 200 {
+                            } else if !(200..300).contains(&status_code) {
                                 status = QueryStatus::Available;
                             }
                         }
@@ -142,7 +141,7 @@ pub async fn check_username(
                         status
                     }
                     (false, ErrorType::ResponseUrl) => {
-                        if 200 <= status_code && status_code < 300 {
+                        if (200..300).contains(&status_code) {
                             QueryStatus::Claimed
                         } else {
                             QueryStatus::Available
@@ -213,10 +212,7 @@ pub fn add_result_to_channel(
             }
         }
 
-        let allow_redirects = match info.error_type {
-            ErrorType::ResponseUrl => false,
-            _ => true,
-        };
+        let allow_redirects = !matches!(info.error_type, ErrorType::ResponseUrl);
 
         let req_method = info.request_method.unwrap_or(match info.error_type {
             // In most cases when we are detecting by status code,

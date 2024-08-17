@@ -1,5 +1,5 @@
 pub fn get_default_data() -> String {
-    return r#"
+    r#"
 {
   "$schema": "data.schema.json",
   "1337x": {
@@ -2793,5 +2793,5 @@ pub fn get_default_data() -> String {
     "username_claimed": "janusz-nowak"
   }
 }
-"#.into();
+"#.into()
 }
