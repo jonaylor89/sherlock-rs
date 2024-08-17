@@ -37,7 +37,7 @@ pub struct RequestResult {
 }
 
 pub async fn check_username(
-    username: String,
+    username: &String,
     site_data: HashMap<String, TargetInfo>,
 ) -> color_eyre::Result<Vec<QueryResult>> {
     let num_of_sites = site_data.keys().len();
@@ -81,16 +81,20 @@ pub async fn check_username(
                     QueryError::InvalidUsernameError => QueryResult {
                         username: username.clone(),
                         site_name: site,
+                        url_main: info.url_main,
                         site_url_user: url,
                         status: QueryStatus::Illegal,
+                        http_status: None,
                         query_time: result.query_time,
                         context: Some(e.to_string()),
                     },
                     QueryError::RequestError => QueryResult {
                         username: username.clone(),
                         site_name: site,
+                        url_main: info.url_main,
                         site_url_user: url,
                         status: QueryStatus::Unknown,
+                        http_status: None,
                         query_time: result.query_time,
                         context: Some(e.to_string()),
                     },
@@ -133,7 +137,9 @@ pub async fn check_username(
                         if let Some(error_codes) = error_codes {
                             if error_codes.contains(&status_code) {
                                 status = QueryStatus::Available;
-                            } else if !(200..300).contains(&status_code) {
+                            }
+                        } else {
+                            if !(200..300).contains(&status_code) {
                                 status = QueryStatus::Available;
                             }
                         }
@@ -152,8 +158,10 @@ pub async fn check_username(
                 let query_result = QueryResult {
                     username: username.clone(),
                     site_name: site,
+                    url_main: info.url_main,
                     site_url_user: url,
                     status,
+                    http_status: Some(status_code),
                     query_time: result.query_time,
                     context: None,
                 };
@@ -173,12 +181,18 @@ pub fn add_result_to_channel(
     sender: Sender<RequestResult>,
 ) -> color_eyre::Result<()> {
     let encoded_username = &username.replace(" ", "%20");
-    let url = match &info.url_probe {
+    let profile_url = info.url.interpolate(encoded_username);
+    let url_probe = match &info.url_probe {
         // There is a special URL for probing existence separate
         // from where the user profile normally can be found.
         Some(url_probe) => url_probe.interpolate(encoded_username),
         None => info.url.interpolate(encoded_username),
     };
+
+    let request_body = info
+        .request_payload
+        .clone()
+        .map(|payload| payload.to_string().interpolate(&username));
 
     tokio::spawn(async move {
         // use regex to make sure the url and username are valid for the site
@@ -187,26 +201,15 @@ pub fn add_result_to_channel(
             let is_match = re.is_match(&username)?;
             if !is_match {
                 // No need to do the check at the site: this username is not allowed.
-                // results_site["status"] = QueryResult(
-                //   username, social_network, url, QueryStatus.ILLEGAL
-                // )
-                // results_site["url_user"] = ""
-                // results_site["http_status"] = ""
-                // results_site["response_text"] = ""
-
-                // return Err(eyre!("Username is not valid for site: {}", site));
-
-                // something needs to be send over the channel here
                 let request_result = RequestResult {
                     username: username.clone(),
                     site,
                     info,
-                    url,
+                    url: profile_url,
                     response: Err(QueryError::InvalidUsernameError),
                     query_time: Duration::from_secs(0),
                 };
 
-                // send to channel
                 sender.send(request_result).await?;
                 return Ok::<_, color_eyre::eyre::Report>(());
             }
@@ -225,16 +228,14 @@ pub fn add_result_to_channel(
             _ => RequestMethod::Get,
         });
 
-        //   make the request (with or without proxy)
-
         let start = Instant::now();
         let resp = make_request(
-            &url,
+            &url_probe,
             info.headers.clone(),
             allow_redirects,
             Duration::from_secs(20),
             req_method,
-            // info.request_payload.clone(),
+            request_body,
         )
         .await;
         let duration = start.elapsed();
@@ -243,7 +244,7 @@ pub fn add_result_to_channel(
             username: username.clone(),
             site,
             info,
-            url: url.clone(),
+            url: profile_url.clone(),
             response: resp.map_err(|_| QueryError::RequestError),
             query_time: duration,
         };
@@ -263,9 +264,8 @@ pub async fn make_request(
     allow_redirects: bool,
     timeout: std::time::Duration,
     method: RequestMethod,
-    // request_payload: Option<Value>,
+    request_payload: Option<String>,
 ) -> color_eyre::Result<Response> {
-    // make request
     let redirect_policy = match allow_redirects {
         true => Policy::limited(5),
         false => Policy::none(),
@@ -277,10 +277,8 @@ pub async fn make_request(
         .map(|(key, value)| {
             let header_name = key.parse::<HeaderName>().unwrap();
             let header_value = value.parse::<HeaderValue>().unwrap();
-            // Ok((header_name, header_value))
             (header_name, header_value)
         })
-        // .collect::<Result<HeaderMap, _>>()
         .collect::<HeaderMap>();
 
     let req_method = match method {
@@ -290,6 +288,8 @@ pub async fn make_request(
         RequestMethod::Head => reqwest::Method::HEAD,
     };
 
+    // TODO: add proxy support
+
     let client = Client::builder()
         .default_headers(headers_map)
         .user_agent("Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/116.0")
@@ -297,7 +297,11 @@ pub async fn make_request(
         .redirect(redirect_policy)
         .build()?;
 
-    let resp = client.request(req_method, url).send().await?;
+    let resp = client
+        .request(req_method, url)
+        .json(&request_payload)
+        .send()
+        .await?;
 
     Ok(resp)
 }

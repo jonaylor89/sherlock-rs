@@ -104,8 +104,17 @@ async fn main() -> Result<()> {
         })?;
 
     for username in cli.usernames {
-        let results = check_username(username, initial_data.targets.clone()).await?;
-        save_results(results)?;
+        let results = check_username(&username, initial_data.targets.clone()).await?;
+        save_results(
+            &username,
+            results,
+            cli.output_file.as_ref(),
+            cli.output_folder.as_ref(),
+            cli.csv,
+            cli.xlsx,
+            cli.print_all,
+            cli.print_found,
+        )?;
     }
 
     Ok(())

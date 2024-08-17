@@ -19,8 +19,10 @@ pub enum QueryStatus {
 pub struct QueryResult {
     pub username: String,
     pub site_name: String,
+    pub url_main: String,
     pub site_url_user: String,
     pub status: QueryStatus,
+    pub http_status: Option<u16>,
     pub query_time: Duration,
     pub context: Option<String>,
 }
