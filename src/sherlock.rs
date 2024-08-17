@@ -39,6 +39,7 @@ pub struct RequestResult {
 pub async fn check_username(
     username: &String,
     site_data: HashMap<String, TargetInfo>,
+    timeout: u64,
     proxy: Option<&String>,
 ) -> color_eyre::Result<Vec<QueryResult>> {
     let num_of_sites = site_data.keys().len();
@@ -54,6 +55,7 @@ pub async fn check_username(
             username.clone(),
             site,
             info,
+            timeout,
             proxy.map(|s| s.clone()),
             tx.clone(),
         )?;
@@ -168,6 +170,7 @@ pub fn add_result_to_channel(
     username: String,
     site: String,
     info: TargetInfo,
+    timeout: u64,
     proxy: Option<String>,
     sender: Sender<RequestResult>,
 ) -> color_eyre::Result<()> {
@@ -224,7 +227,7 @@ pub fn add_result_to_channel(
             &url_probe,
             info.headers.clone(),
             allow_redirects,
-            Duration::from_secs(20),
+            Duration::from_secs(timeout),
             req_method,
             request_body,
             proxy.as_deref(),

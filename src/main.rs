@@ -96,8 +96,13 @@ async fn main() -> Result<()> {
         })?;
 
     for username in cli.usernames {
-        let results =
-            check_username(&username, initial_data.targets.clone(), cli.proxy.as_ref()).await?;
+        let results = check_username(
+            &username,
+            initial_data.targets.clone(),
+            cli.timeout,
+            cli.proxy.as_ref(),
+        )
+        .await?;
         save_results(
             &username,
             results,
