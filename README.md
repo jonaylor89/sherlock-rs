@@ -1,11 +1,12 @@
 
 todo
-- [ ] get happy path working
+- [x] get happy path working
 - [ ] get error handling working
 - [ ] add different output formats
 - [ ] add proxy support
 - [ ] add tor support
 - [ ] add tests
+- [ ] support all cli args
 - [ ] add docstrings
 
 # Sherlock
