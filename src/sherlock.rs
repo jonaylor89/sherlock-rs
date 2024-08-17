@@ -69,44 +69,29 @@ pub async fn check_username(
         let url = result.url;
         let username = result.username;
 
-        match result.response {
-            Err(e) => {
-                // results_site["status"] = QueryResult(
-                //   username, social_network, url, QueryStatus.NOT_FOUND
-                // )
-                // results_site["url_user"] = ""
-                // results_site["http_status"] = ""
-                // results_site["response_text"] = ""
-
-                // TODO: this should change based on the error
-                // NotFound is for the username regex being bad
-                // but if it's another error, it should be unknown
-                let query_result = match e {
-                    QueryError::InvalidUsernameError => QueryResult {
-                        username: username.clone(),
-                        site_name: site,
-                        url_main: info.url_main,
-                        site_url_user: url,
-                        status: QueryStatus::Illegal,
-                        http_status: None,
-                        query_time: result.query_time,
-                        context: Some(e.to_string()),
-                    },
-                    QueryError::RequestError => QueryResult {
-                        username: username.clone(),
-                        site_name: site,
-                        url_main: info.url_main,
-                        site_url_user: url,
-                        status: QueryStatus::Unknown,
-                        http_status: None,
-                        query_time: result.query_time,
-                        context: Some(e.to_string()),
-                    },
-                };
-
-                print_result(&query_result);
-                results.push(query_result);
-            }
+        let query_result: QueryResult = match result.response {
+            Err(e) => match e {
+                QueryError::InvalidUsernameError => QueryResult {
+                    username: username.clone(),
+                    site_name: site,
+                    url_main: info.url_main,
+                    site_url_user: url,
+                    status: QueryStatus::Illegal,
+                    http_status: None,
+                    query_time: result.query_time,
+                    context: Some(e.to_string()),
+                },
+                QueryError::RequestError => QueryResult {
+                    username: username.clone(),
+                    site_name: site,
+                    url_main: info.url_main,
+                    site_url_user: url,
+                    status: QueryStatus::Unknown,
+                    http_status: None,
+                    query_time: result.query_time,
+                    context: Some(e.to_string()),
+                },
+            },
             Ok(response) => {
                 // As WAFs advance and evolve, they will occasionally block Sherlock and
                 // lead to false positives and negatives. Fingerprints should be added
@@ -159,7 +144,7 @@ pub async fn check_username(
                     }
                 };
 
-                let query_result = QueryResult {
+                QueryResult {
                     username: username.clone(),
                     site_name: site,
                     url_main: info.url_main,
@@ -168,11 +153,12 @@ pub async fn check_username(
                     http_status: Some(status_code),
                     query_time: result.query_time,
                     context: None,
-                };
-                print_result(&query_result);
-                results.push(query_result);
+                }
             }
         };
+
+        print_result(&query_result);
+        results.push(query_result);
     }
 
     Ok(results)

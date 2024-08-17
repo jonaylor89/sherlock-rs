@@ -1,2 +1,6 @@
 /target
 TODO.*
+
+*.txt
+*.csv
+*.xlsx
