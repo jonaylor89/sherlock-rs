@@ -1,7 +1,7 @@
 use crate::{
     interpolate::Interpolatable,
     output::print_result,
-    query_result::{self, QueryResult, QueryStatus},
+    query_result::{QueryResult, QueryStatus},
     sherlock_target_manifest::{ErrorType, RequestMethod, TargetInfo},
 };
 use color_eyre::eyre;
@@ -77,7 +77,7 @@ pub async fn check_username(
                 // TODO: this should change based on the error
                 // NotFound is for the username regex being bad
                 // but if it's another error, it should be unknown
-                let query_result = match (e) {
+                let query_result = match e {
                     QueryError::InvalidUsernameError => QueryResult {
                         username: username.clone(),
                         site_name: site,
