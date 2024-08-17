@@ -1,7 +1,7 @@
 use crate::{
     interpolate::Interpolatable,
     output::print_result,
-    query_result::{QueryResult, QueryStatus},
+    query_result::{self, QueryResult, QueryStatus},
     sherlock_target_manifest::{ErrorType, RequestMethod, TargetInfo},
 };
 use color_eyre::eyre;
@@ -77,14 +77,25 @@ pub async fn check_username(
                 // TODO: this should change based on the error
                 // NotFound is for the username regex being bad
                 // but if it's another error, it should be unknown
-                let query_result = QueryResult {
-                    username: username.clone(),
-                    site_name: site,
-                    site_url_user: url,
-                    status: QueryStatus::Unknown,
-                    query_time: result.query_time,
-                    context: Some(e.to_string()),
+                let query_result = match (e) {
+                    QueryError::InvalidUsernameError => QueryResult {
+                        username: username.clone(),
+                        site_name: site,
+                        site_url_user: url,
+                        status: QueryStatus::Illegal,
+                        query_time: result.query_time,
+                        context: Some(e.to_string()),
+                    },
+                    QueryError::RequestError => QueryResult {
+                        username: username.clone(),
+                        site_name: site,
+                        site_url_user: url,
+                        status: QueryStatus::Unknown,
+                        query_time: result.query_time,
+                        context: Some(e.to_string()),
+                    },
                 };
+
                 print_result(&query_result);
                 results.push(query_result);
             }
@@ -111,9 +122,9 @@ pub async fn check_username(
                     (false, ErrorType::Message) => {
                         let error_flag = info.error_msg.iter().any(|msg| msg.is_in(&resp_text));
                         if error_flag {
-                            QueryStatus::Claimed
-                        } else {
                             QueryStatus::Available
+                        } else {
+                            QueryStatus::Claimed
                         }
                     }
                     (false, ErrorType::StatusCode) => {
