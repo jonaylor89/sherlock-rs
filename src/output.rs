@@ -3,7 +3,12 @@ use color_eyre::Result;
 use colored::Colorize;
 
 pub fn save_results(results: Vec<QueryResult>) -> Result<()> {
-    println!("total of {} results", results.len());
+    let total_hits = results
+        .iter()
+        .filter(|result| result.status == QueryStatus::Claimed)
+        .count();
+
+    println!("total of {}/{} hits", total_hits, results.len());
 
     // save results to file
     Ok(())
@@ -20,7 +25,7 @@ pub fn print_result(result: &QueryResult) {
                 "]".white(),
                 response_time_text.white(),
                 result.site_name.green(),
-                result.site_url_user.green(),
+                result.site_url_user,
             );
         }
         QueryStatus::Available => {
@@ -63,7 +68,7 @@ pub fn print_result(result: &QueryResult) {
                 "-".red(),
                 "]".white(),
                 result.site_name.green(),
-                "Blocked by boy detection".red(),
+                "Blocked by bot detection".red(),
                 "(proxy may help)".yellow(),
             );
         }

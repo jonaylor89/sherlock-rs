@@ -1,7 +1,7 @@
 use std::fmt;
 use std::time::Duration;
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Eq)]
 pub enum QueryStatus {
     /// username detected
     Claimed,
