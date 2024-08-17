@@ -11,8 +11,7 @@ pub struct SherlockTargetManifest {
     pub targets: HashMap<String, TargetInfo>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-// #[serde(rename_all = "camelCase")]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct TargetInfo {
     pub url: String,
     #[serde(rename = "urlMain")]
@@ -50,7 +49,7 @@ pub struct TargetInfo {
     pub response_url: Option<String>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(untagged)]
 pub enum Tags {
     Single(String),
@@ -66,7 +65,7 @@ pub enum RequestMethod {
     Put,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(rename_all = "snake_case")]
 pub enum ErrorType {
     Message,
@@ -74,7 +73,7 @@ pub enum ErrorType {
     StatusCode,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(untagged)]
 pub enum ErrorMsg {
     Single(String),
@@ -90,7 +89,7 @@ impl ErrorMsg {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(untagged)]
 pub enum ErrorCode {
     Single(u16),

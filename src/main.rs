@@ -7,10 +7,14 @@ use sherlock_rs::{
 
 #[derive(Parser)]
 #[command(version, about, long_about = None)]
+#[command(name = "sherlock")]
+#[command(author = "Johannes Naylor <jonaylor89@gmail.com>")]
+#[command(version = "1.0")]
+#[command(about = "Hunt down social media accounts by username", long_about = None)]
 struct Cli {
-    /// The username to check.
-    #[clap(name = "username")]
-    username: String,
+    /// The usernames to check.
+    #[clap(name = "usernames", required = true)]
+    usernames: Vec<String>,
 
     /// Display extra debugging information and metrics.
     #[clap(short, long, alias = "debug")]
@@ -21,15 +25,15 @@ struct Cli {
     output_file: Option<String>,
 
     /// If using single username, the output of the result will be saved to this file.
-    #[clap(short, long, alias = "output")]
-    output: Option<String>,
+    #[clap(short = 'f', long, alias = "output-folder")]
+    output_folder: Option<String>,
 
     /// Make requests over Tor; increases runtime; requires Tor to be installed and in system path.
-    #[clap(short, long, alias = "tor")]
+    #[clap(long, alias = "tor")]
     tor: bool,
 
     /// Make requests over Tor with new Tor circuit after each request; increases runtime; requires Tor to be installed and in system path.
-    #[clap(short, long, alias = "unique-tor")]
+    #[clap(long, alias = "unique-tor")]
     unique_tor: bool,
 
     /// Create Comma-Separated Values (CSV) File.
@@ -61,11 +65,11 @@ struct Cli {
     timeout: u64,
 
     /// Output sites where the username was not found.
-    #[clap(short, long, alias = "print-all")]
+    #[clap(long, alias = "print-all")]
     print_all: bool,
 
     /// Output sites where the username was found.
-    #[clap(short, long, alias = "print-found", default_value_t = true)]
+    #[clap(long, alias = "print-found", default_value_t = true)]
     print_found: bool,
 
     /// Don't color terminal output.
@@ -81,7 +85,7 @@ struct Cli {
     local: bool,
 
     /// Include checking of NSFW sites from default list.
-    #[clap(short, long, alias = "nsfw")]
+    #[clap(long, alias = "nsfw")]
     nsfw: bool,
 }
 
@@ -90,10 +94,8 @@ async fn main() -> Result<()> {
     color_eyre::install()?;
 
     let cli = Cli::parse();
-    let username = cli.username;
 
     let json_data = get_default_data();
-    // let initial_data = serde_json::from_str::<SherlockTargetManifest>(&initial_data_str)?;
     // let json_data = include_str!("../resources/data.json");
     let deserializer = &mut serde_json::Deserializer::from_str(&json_data);
     let initial_data: SherlockTargetManifest = serde_path_to_error::deserialize(deserializer)
@@ -102,12 +104,10 @@ async fn main() -> Result<()> {
             err
         })?;
 
-    // TODO: for username in usernames:
-    //          run sherlock
-    //          output to txt, xlsx, etc
-
-    let results = check_username(username.into(), initial_data.targets).await?;
-    save_results(results)?;
+    for username in cli.usernames {
+        let results = check_username(username, initial_data.targets.clone()).await?;
+        save_results(results)?;
+    }
 
     Ok(())
 }
