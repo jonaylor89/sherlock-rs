@@ -28,14 +28,6 @@ struct Cli {
     #[clap(short = 'f', long, alias = "output-folder")]
     output_folder: Option<String>,
 
-    /// Make requests over Tor; increases runtime; requires Tor to be installed and in system path.
-    #[clap(long, alias = "tor")]
-    tor: bool,
-
-    /// Make requests over Tor with new Tor circuit after each request; increases runtime; requires Tor to be installed and in system path.
-    #[clap(long, alias = "unique-tor")]
-    unique_tor: bool,
-
     /// Create Comma-Separated Values (CSV) File.
     #[clap(short, long, alias = "csv")]
     csv: bool,
@@ -104,7 +96,8 @@ async fn main() -> Result<()> {
         })?;
 
     for username in cli.usernames {
-        let results = check_username(&username, initial_data.targets.clone()).await?;
+        let results =
+            check_username(&username, initial_data.targets.clone(), cli.proxy.as_ref()).await?;
         save_results(
             &username,
             results,

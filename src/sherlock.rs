@@ -9,7 +9,7 @@ use fancy_regex::Regex;
 use reqwest::{
     header::{HeaderMap, HeaderName, HeaderValue},
     redirect::Policy,
-    Client, Response,
+    Client, Proxy, Response,
 };
 use std::{
     collections::HashMap,
@@ -39,6 +39,7 @@ pub struct RequestResult {
 pub async fn check_username(
     username: &String,
     site_data: HashMap<String, TargetInfo>,
+    proxy: Option<&String>,
 ) -> color_eyre::Result<Vec<QueryResult>> {
     let num_of_sites = site_data.keys().len();
     if num_of_sites == 0 {
@@ -49,10 +50,13 @@ pub async fn check_username(
 
     // ping sites for username matches
     for (site, info) in site_data.into_iter() {
-        let sender = tx.clone();
-        let username_clone = username.clone();
-
-        add_result_to_channel(username_clone, site, info, sender)?;
+        add_result_to_channel(
+            username.clone(),
+            site,
+            info,
+            proxy.map(|s| s.clone()),
+            tx.clone(),
+        )?;
     }
 
     drop(tx);
@@ -178,6 +182,7 @@ pub fn add_result_to_channel(
     username: String,
     site: String,
     info: TargetInfo,
+    proxy: Option<String>,
     sender: Sender<RequestResult>,
 ) -> color_eyre::Result<()> {
     let encoded_username = &username.replace(" ", "%20");
@@ -236,6 +241,8 @@ pub fn add_result_to_channel(
             Duration::from_secs(20),
             req_method,
             request_body,
+            proxy.as_deref(),
+            None,
         )
         .await;
         let duration = start.elapsed();
@@ -265,6 +272,8 @@ pub async fn make_request(
     timeout: std::time::Duration,
     method: RequestMethod,
     request_payload: Option<String>,
+    proxy: Option<&str>,
+    user_agent: Option<String>,
 ) -> color_eyre::Result<Response> {
     let redirect_policy = match allow_redirects {
         true => Policy::limited(5),
@@ -288,14 +297,20 @@ pub async fn make_request(
         RequestMethod::Head => reqwest::Method::HEAD,
     };
 
-    // TODO: add proxy support
+    let req_user_agent = user_agent
+        .unwrap_or("Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/116.0".into());
 
-    let client = Client::builder()
+    let mut builder = Client::builder()
         .default_headers(headers_map)
-        .user_agent("Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/116.0")
+        .user_agent(req_user_agent)
         .timeout(timeout)
-        .redirect(redirect_policy)
-        .build()?;
+        .redirect(redirect_policy);
+
+    if let Some(proxy) = proxy {
+        builder = builder.proxy(Proxy::all(proxy)?);
+    }
+
+    let client = builder.build()?;
 
     let resp = client
         .request(req_method, url)
