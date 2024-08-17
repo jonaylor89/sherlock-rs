@@ -1,3 +1,5 @@
+/// the default sites to check for sherlock
+/// includes >400 websites and their error messages
 pub fn get_default_data() -> String {
     r#"
 {
