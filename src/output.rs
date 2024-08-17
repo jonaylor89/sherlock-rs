@@ -8,6 +8,20 @@ use rust_xlsxwriter::Workbook;
 use std::fs::File;
 use std::io::Write;
 
+/// Save the results to a file.
+///
+/// # Arguments
+/// * `username` - The username to save the results for.
+/// * `results` - The results to save.
+/// * `output_file` - The output file to save the results to.
+/// * `output_folder` - The output folder to save the results to.
+/// * `csv` - Save the results to a CSV file.
+/// * `xlsx` - Save the results to an XLSX file.
+/// * `print_all` - Print all results.
+/// * `print_found` - Print only found results.
+///
+/// # Returns
+/// A Result containing the success or failure of the operation.
 pub fn save_results(
     username: &str,
     results: Vec<QueryResult>,
@@ -60,6 +74,16 @@ pub fn save_results(
     Ok(())
 }
 
+/// Write the results to a Excel File.
+/// # Arguments
+/// * `username` - The username to save the results for.
+/// * `results` - The results to save.
+/// * `output_folder` - The output folder to save the results to.
+/// * `print_all` - Print all results.
+/// * `print_found` - Print only found results.
+///
+/// # Returns
+/// A Result containing the success or failure of the operation.
 #[cfg(feature = "xlsx")]
 pub fn write_xlsx(
     username: &str,
@@ -109,6 +133,16 @@ pub fn write_xlsx(
     Ok(())
 }
 
+/// Write the results to a CSV File.
+/// # Arguments
+/// * `username` - The username to save the results for.
+/// * `results` - The results to save.
+/// * `output_folder` - The output folder to save the results to.
+/// * `print_all` - Print all results.
+/// * `print_found` - Print only found results.
+///
+/// # Returns
+/// A Result containing the success or failure of the operation.
 pub fn write_csv(
     username: &str,
     results: &Vec<QueryResult>,
@@ -153,6 +187,10 @@ pub fn write_csv(
     Ok(())
 }
 
+/// Print the results to the console.
+///
+/// # Arguments
+/// * `results` - The results from checking the username.
 pub fn print_result(result: &QueryResult) {
     let response_time_text = format!("[{}ms]", result.query_time.as_millis());
     match result.status {
