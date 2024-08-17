@@ -36,13 +36,13 @@ pub fn print_result(result: &QueryResult) {
         }
         QueryStatus::Unknown => {
             println!(
-                "{}{}{} {} {}: {:?}",
+                "{}{}{} {} {}: {}",
                 "[".white(),
                 "-".red(),
                 "]".white(),
                 response_time_text.white(),
                 result.site_name.green(),
-                result.context,
+                result.context.as_ref().unwrap().yellow(),
             );
         }
         QueryStatus::Illegal => {
