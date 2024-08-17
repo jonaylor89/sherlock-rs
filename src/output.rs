@@ -1,7 +1,10 @@
 use crate::query_result::{QueryResult, QueryStatus};
 use color_eyre::Result;
 use colored::Colorize;
+
+#[cfg(feature = "xlsx")]
 use rust_xlsxwriter::Workbook;
+
 use std::fs::File;
 use std::io::Write;
 
@@ -47,54 +50,17 @@ pub fn save_results(
     }
 
     if xlsx {
+        #[cfg(feature = "xlsx")]
         write_xlsx(&username, &results, output_folder, print_all, print_found)?;
+
+        #[cfg(not(feature = "xlsx"))]
+        eprintln!("Error: xlsx support is not enabled");
     }
 
-    // if args.xlsx:
-    //     usernames = []
-    //     names = []
-    //     url_main = []
-    //     url_user = []
-    //     exists = []
-    //     http_status = []
-    //     response_time_s = []
-
-    //     for site in results:
-    //         if (
-    //             args.print_found
-    //             and not args.print_all
-    //             and results[site]["status"].status != QueryStatus.CLAIMED
-    //         ):
-    //             continue
-
-    //         if response_time_s is None:
-    //             response_time_s.append("")
-    //         else:
-    //             response_time_s.append(results[site]["status"].query_time)
-    //         usernames.append(username)
-    //         names.append(site)
-    //         url_main.append(results[site]["url_main"])
-    //         url_user.append(results[site]["url_user"])
-    //         exists.append(str(results[site]["status"].status))
-    //         http_status.append(results[site]["http_status"])
-
-    //     DataFrame = pd.DataFrame(
-    //         {
-    //             "username": usernames,
-    //             "name": names,
-    //             "url_main": url_main,
-    //             "url_user": url_user,
-    //             "exists": exists,
-    //             "http_status": http_status,
-    //             "response_time_s": response_time_s,
-    //         }
-    //     )
-    //     DataFrame.to_excel(f"{username}.xlsx", sheet_name="sheet1", index=False)
-
-    // save results to file
     Ok(())
 }
 
+#[cfg(feature = "xlsx")]
 pub fn write_xlsx(
     username: &str,
     results: &Vec<QueryResult>,
