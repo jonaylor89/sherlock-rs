@@ -1,5 +1,6 @@
 use crate::{
     interpolate::Interpolatable,
+    output::print_result,
     query_result::{QueryResult, QueryStatus},
     sherlock_target_manifest::{ErrorType, RequestMethod, TargetInfo},
 };
@@ -76,14 +77,16 @@ pub async fn check_username(
                 // TODO: this should change based on the error
                 // NotFound is for the username regex being bad
                 // but if it's another error, it should be unknown
-                results.push(QueryResult {
+                let query_result = QueryResult {
                     username: username.clone(),
                     site_name: site,
                     site_url_user: url,
-                    status: QueryStatus::Illegal,
-                    query_time: Duration::from_secs(0),
+                    status: QueryStatus::Unknown,
+                    query_time: result.query_time,
                     context: Some(e.to_string()),
-                });
+                };
+                print_result(&query_result);
+                results.push(query_result);
             }
             Ok(response) => {
                 // As WAFs advance and evolve, they will occasionally block Sherlock and
@@ -136,15 +139,16 @@ pub async fn check_username(
                     }
                 };
 
-                println!("{}: {:?}", site, status);
-                results.push(QueryResult {
+                let query_result = QueryResult {
                     username: username.clone(),
                     site_name: site,
                     site_url_user: url,
                     status,
-                    query_time: Duration::from_secs(0),
+                    query_time: result.query_time,
                     context: None,
-                });
+                };
+                print_result(&query_result);
+                results.push(query_result);
             }
         };
     }
