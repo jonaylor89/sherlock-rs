@@ -1,6 +1,7 @@
 use crate::query_result::{QueryResult, QueryStatus};
 use color_eyre::Result;
 use colored::Colorize;
+use rust_xlsxwriter::Workbook;
 use std::fs::File;
 use std::io::Write;
 
@@ -46,7 +47,7 @@ pub fn save_results(
     }
 
     if xlsx {
-        println!("xlsx not implemented yet");
+        write_xlsx(&username, &results, output_folder, print_all, print_found)?;
     }
 
     // if args.xlsx:
@@ -91,6 +92,54 @@ pub fn save_results(
     //     DataFrame.to_excel(f"{username}.xlsx", sheet_name="sheet1", index=False)
 
     // save results to file
+    Ok(())
+}
+
+pub fn write_xlsx(
+    username: &str,
+    results: &Vec<QueryResult>,
+    output_folder: Option<&String>,
+    print_all: bool,
+    print_found: bool,
+) -> color_eyre::Result<()> {
+    let mut workbook = Workbook::new();
+    let worksheet = workbook.add_worksheet();
+
+    // Write the header
+    worksheet.write_string(0, 0, "username")?;
+    worksheet.write_string(0, 1, "name")?;
+    worksheet.write_string(0, 2, "url_main")?;
+    worksheet.write_string(0, 3, "url_user")?;
+    worksheet.write_string(0, 4, "exists")?;
+    worksheet.write_string(0, 5, "http_status")?;
+    worksheet.write_string(0, 6, "response_time_s")?;
+
+    let mut row = 1;
+    for result in results {
+        if print_found && !print_all && result.status != QueryStatus::Claimed {
+            continue;
+        }
+
+        let response_time_s = result.query_time.as_secs();
+
+        worksheet.write_string(row, 0, username)?;
+        worksheet.write_string(row, 1, &result.site_name)?;
+        worksheet.write_string(row, 2, &result.url_main)?;
+        worksheet.write_string(row, 3, &result.site_url_user)?;
+        worksheet.write_string(row, 4, &format!("{:?}", result.status))?;
+        worksheet.write_number(row, 5, result.http_status.unwrap_or(0) as f64)?;
+        worksheet.write_number(row, 6, response_time_s as f64)?;
+
+        row += 1;
+    }
+
+    let xlsx_filename = match output_folder {
+        None => format!("{}.xlsx", username),
+        Some(folder) => format!("{}/{}.xlsx", folder, username),
+    };
+
+    workbook.save(xlsx_filename)?;
+
     Ok(())
 }
 

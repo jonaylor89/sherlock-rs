@@ -139,7 +139,7 @@ pub async fn check_username(
                                 status = QueryStatus::Available;
                             }
                         } else {
-                            if !(200..300).contains(&status_code) {
+                            if &status_code > &399 || &status_code < &200 {
                                 status = QueryStatus::Available;
                             }
                         }
