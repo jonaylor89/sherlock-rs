@@ -12,7 +12,7 @@ use sherlock_rs::{
 #[command(version = "1.0")]
 #[command(about = "Hunt down social media accounts by username", long_about = None)]
 struct Cli {
-    /// The usernames to check.
+    /// One or more usernames to check with social networks. Check similar usernames using {?} (replace to '_', '-', '.').
     #[clap(name = "usernames", required = true)]
     usernames: Vec<String>,
 
@@ -21,7 +21,7 @@ struct Cli {
     verbose: bool,
 
     /// The output file to save the results to.
-    #[clap(short, long, alias = "output")]
+    #[clap(short, long = "output")]
     output_file: Option<String>,
 
     /// If using single username, the output of the result will be saved to this file.
@@ -57,7 +57,7 @@ struct Cli {
     dump_response: bool,
 
     /// Load data from a JSON file or an online, valid, JSON file.
-    #[clap(short, long, alias = "json")]
+    #[clap(short, long = "json")]
     json_file: Option<String>,
 
     /// Time (in seconds) to wait for response to requests.
