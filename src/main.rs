@@ -1,7 +1,9 @@
 use clap::Parser;
 use color_eyre::Result;
 use sherlock_rs::{
-    default_data::get_default_data, output::save_results, sherlock::check_username,
+    get_data::{get_default_data, get_json_data},
+    output::save_results,
+    sherlock::check_username,
     sherlock_target_manifest::SherlockTargetManifest,
 };
 
@@ -9,7 +11,7 @@ use sherlock_rs::{
 #[command(version, about, long_about = None)]
 #[command(name = "sherlock")]
 #[command(author = "Johannes Naylor <jonaylor89@gmail.com>")]
-#[command(version = "1.0")]
+#[command(version = "0.1.0")]
 #[command(about = "Hunt down social media accounts by username", long_about = None)]
 struct Cli {
     /// One or more usernames to check with social networks. Check similar usernames using {?} (replace to '_', '-', '.').
@@ -49,8 +51,12 @@ struct Cli {
     dump_response: bool,
 
     /// Load data from a JSON file or an online, valid, JSON file.
-    #[clap(short, long = "json")]
-    json_file: Option<String>,
+    #[clap(
+        short,
+        long = "json",
+        default_value = "https://raw.githubusercontent.com/sherlock-project/sherlock/master/sherlock_project/resources/data.json"
+    )]
+    json_file: String,
 
     /// Time (in seconds) to wait for response to requests.
     #[clap(short, long, alias = "timeout", default_value_t = 60)]
@@ -68,8 +74,8 @@ struct Cli {
     #[clap(short, long, alias = "browse")]
     browse: bool,
 
-    /// Force the use of the local data.json file.
-    #[clap(short, long, alias = "local")]
+    /// Use local data file instead of fetching the latest version online.
+    #[clap(short, long)]
     local: bool,
 
     /// Include checking of NSFW sites from default list.
@@ -83,9 +89,13 @@ async fn main() -> Result<()> {
 
     let cli = Cli::parse();
 
-    let json_data = get_default_data();
+    let json_str = match cli.local {
+        true => get_default_data(),
+        false => get_json_data(cli.json_file).await?,
+    };
+
     // let json_data = include_str!("../resources/data.json");
-    let deserializer = &mut serde_json::Deserializer::from_str(&json_data);
+    let deserializer = &mut serde_json::Deserializer::from_str(&json_str);
     let initial_data: SherlockTargetManifest = serde_path_to_error::deserialize(deserializer)
         .inspect_err(|err| {
             println!("[!!!] error path [{}]", err.path());
