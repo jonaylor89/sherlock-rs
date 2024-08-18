@@ -70,7 +70,11 @@ Options:
 cargo install sherlock
 ```
 
+## Motivation
+
+I strongly dislike deploying python applications and wanted a single binary. Go get's on my nerves, Swift doesn't have great tool server-side and on linux, C++ isn't even a question, so Rust it is.
+
 ## License
 
 MIT © Johannes Naylor<br/>
-Original Creator - [Siddharth Dushantha](https://github.com/sdushantha)
+Original Creator of Sherlock - [Siddharth Dushantha](https://github.com/sdushantha)
