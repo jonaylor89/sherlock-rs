@@ -72,7 +72,7 @@ cargo install sherlock
 
 ## Motivation
 
-I strongly dislike deploying python applications and wanted a single binary. Go get's on my nerves, Swift doesn't have great tool server-side and on linux, C++ isn't even a question, so Rust it is.
+I strongly dislike deploying python applications and wanted a single binary. Go get's on my nerves, Swift doesn't have great tooling server-side and on linux, C++ isn't even a question, so Rust it is.
 
 ## License
 
