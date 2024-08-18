@@ -43,6 +43,7 @@ pub async fn check_username(
     proxy: Option<&String>,
     print_all: bool,
     print_found: bool,
+    dump_response: bool,
 ) -> color_eyre::Result<Vec<QueryResult>> {
     let num_of_sites = site_data.keys().len();
     if num_of_sites == 0 {
@@ -54,12 +55,12 @@ pub async fn check_username(
     // ping sites for username matches
     for (site, info) in site_data.into_iter() {
         add_result_to_channel(
+            tx.clone(),
             username.to_owned(),
             site,
             info,
             timeout,
             proxy.cloned(),
-            tx.clone(),
         )?;
     }
 
@@ -113,7 +114,8 @@ pub async fn check_username(
                 let wfthit = wafhit_msgs.iter().any(|msg| resp_text.contains(msg));
 
                 let error_type = info.error_type;
-                let status = match (wfthit, error_type) {
+                let error_code = info.error_code;
+                let status = match (wfthit, &error_type) {
                     (true, _) => QueryStatus::Waf,
                     (false, ErrorType::Message) => {
                         let error_flag = info.error_msg.iter().any(|msg| msg.is_in(&resp_text));
@@ -124,10 +126,9 @@ pub async fn check_username(
                         }
                     }
                     (false, ErrorType::StatusCode) => {
-                        let error_codes = info.error_code;
                         let mut status = QueryStatus::Claimed;
 
-                        if let Some(error_codes) = error_codes {
+                        if let Some(error_codes) = &error_code {
                             if error_codes.contains(&status_code) {
                                 status = QueryStatus::Available;
                             }
@@ -145,6 +146,26 @@ pub async fn check_username(
                         }
                     }
                 };
+
+                if dump_response {
+                    println!("+++++++++++++++++++++");
+                    println!("TARGET NAME   : {site}");
+                    println!("USERNAME      : {username}");
+                    println!("TARGET URL    : {:?}", info.url_probe);
+                    println!("TEST METHOD   : {:?}", error_type);
+                    if let Some(error_codes) = &error_code {
+                        println!("ERROR CODES   : {:?}", error_codes);
+                    }
+                    println!("Results...");
+                    println!("RESPONSE CODE : {}", status_code);
+                    println!("ERROR TEXT    : {:?}", info.error_msg);
+                    println!(">>>>> BEGIN RESPONSE TEXT");
+                    println!("{}", resp_text);
+                    println!("<<<<< END RESPONSE TEXT");
+
+                    println!("VERDICT       : {:?}", status);
+                    println!("+++++++++++++++++++++");
+                }
 
                 QueryResult {
                     username: username.clone(),
@@ -169,12 +190,12 @@ pub async fn check_username(
 }
 
 pub fn add_result_to_channel(
+    sender: Sender<RequestResult>,
     username: String,
     site: String,
     info: TargetInfo,
     timeout: u64,
     proxy: Option<String>,
-    sender: Sender<RequestResult>,
 ) -> color_eyre::Result<()> {
     let encoded_username = &username.replace(" ", "%20");
     let profile_url = info.url.interpolate(encoded_username);

@@ -120,6 +120,7 @@ async fn main() -> Result<()> {
             cli.proxy.as_ref(),
             cli.print_all,
             cli.print_found,
+            cli.dump_response,
         )
         .await?;
         save_results(
