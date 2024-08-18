@@ -54,7 +54,7 @@ pub async fn get_json_data(json_file: String) -> color_eyre::Result<String> {
     Ok(json_str)
 }
 
-/// the default sites to check for sherlock
+/// the default sites to check for sherlock locally
 /// includes >400 websites and their error messages
 pub fn get_default_data() -> String {
     r#"
