@@ -23,7 +23,7 @@ use std::collections::HashMap;
 ///
 /// assert_eq!(variants, vec![
 ///   "user_name",
-///  `"user-name",
+///   "user-name",
 ///   "user.name",
 ///   "another_user",
 ///   "another-user",
@@ -71,8 +71,8 @@ impl Interpolatable for String {
     /// ```
     /// use sherlock::utils::Interpolatable;
     ///
-    /// let string = "value is '{}'";
-    /// let interpolated_string = string.interpolate("test");
+    /// let string = "value is '{}'".to_string();
+    /// let interpolated_string = string.interpolate("test".into());
     ///
     /// assert_eq!(interpolated_string, "value is 'test'");
     /// ```
@@ -94,7 +94,7 @@ impl<T: Interpolatable> Interpolatable for Vec<T> {
     /// ```
     /// use sherlock::utils::Interpolatable;
     ///
-    /// let vec = vec!["value is '{}'"];
+    /// let vec = vec!["value is '{}'".to_string()];
     /// let interpolated_vec = vec.interpolate("test");
     ///
     /// assert_eq!(interpolated_vec[0], "value is 'test'");
