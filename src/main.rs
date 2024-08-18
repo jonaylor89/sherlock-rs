@@ -77,7 +77,7 @@ struct Cli {
     local: bool,
 
     /// Include checking of NSFW sites from default list.
-    #[clap(long, alias = "nsfw")]
+    #[clap(long, alias = "nsfw", default_value_t = true)]
     nsfw: bool,
 }
 
@@ -95,10 +95,27 @@ async fn main() -> Result<()> {
             println!("[!!!] error path [{}]", err.path());
         })?;
 
+    let targets = match cli.nsfw {
+        true => initial_data.targets,
+        false => initial_data
+            .targets
+            .into_iter()
+            .filter(|(_, info)| !info.is_nsfw.unwrap_or(false))
+            .collect(),
+    };
+
+    let filtered_targets = match cli.site_list.is_empty() {
+        true => targets,
+        false => targets
+            .into_iter()
+            .filter(|(site, _)| cli.site_list.contains(&site))
+            .collect(),
+    };
+
     for username in cli.usernames {
         let results = check_username(
             &username,
-            initial_data.targets.clone(),
+            filtered_targets.clone(),
             cli.timeout,
             cli.proxy.as_ref(),
         )

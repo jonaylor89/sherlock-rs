@@ -1,0 +1,8 @@
+.git/
+.vscode/
+screenshot/
+tests/
+*.txt
+*.csv
+*.xlsx
+devel/
