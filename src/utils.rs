@@ -1,11 +1,94 @@
 use std::collections::HashMap;
 
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_create_username_variants() {
+        let usernames = vec![
+            String::from("user{?}name"),
+            String::from("another{?}user"),
+            String::from("test{?}user"),
+        ];
+        let expected = vec![
+            "user_name",
+            "user-name",
+            "user.name",
+            "another_user",
+            "another-user",
+            "another.user",
+            "test_user",
+            "test-user",
+            "test.user",
+        ];
+        let result = create_username_variants(&usernames);
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_create_username_variants_no_symbol() {
+        let usernames = vec![
+            String::from("username"),
+            String::from("anotheruser"),
+            String::from("testuser"),
+        ];
+        let expected = vec!["username", "anotheruser", "testuser"];
+        let result = create_username_variants(&usernames);
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_create_username_variants_empty() {
+        let usernames: Vec<String> = vec![];
+        let expected: Vec<String> = vec![];
+        let result = create_username_variants(&usernames);
+        assert_eq!(result, expected);
+    }
+}
+///
+/// Creates username variants by replacing the variant symbol with check symbols.
+///
+/// # Arguments
+/// * `usernames` - The usernames to create variants for.
+///
+/// # Returns
+/// The username variants.
+///
+/// # Example
+/// ```
+/// use sherlock::utils::create_username_variants;
+///
+/// let usernames = vec![
+///    String::from("user{?}name"),
+///    String::from("another{?}user"),
+///   String::from("test{?}user"),
+/// ];
+///
+/// let variants = create_username_variants(&usernames);
+///
+/// assert_eq!(variants, vec![
+///   "user_name",
+///  `"user-name",
+///   "user.name",
+///   "another_user",
+///   "another-user",
+///   "another.user",
+///   "test_user",
+///   "test-user",
+///   "test.user",
+/// ]);
+/// ```
 pub fn create_username_variants(usernames: &Vec<String>) -> Vec<String> {
     let variant_symbol = "{?}";
-    let check_symbols = vec!["_", "-", "."];
+    let check_symbols = ["_", "-", "."];
     let variants = usernames
         .iter()
         .map(|username| {
+            if !username.contains(variant_symbol) {
+                return vec![username.clone()];
+            }
+
             check_symbols
                 .iter()
                 .map(|symbol| username.replace(variant_symbol, symbol))
@@ -33,6 +116,8 @@ impl Interpolatable for String {
     ///
     /// # Example
     /// ```
+    /// use sherlock::utils::Interpolatable;
+    ///
     /// let string = "value is '{}'";
     /// let interpolated_string = string.interpolate("test");
     ///
@@ -54,6 +139,8 @@ impl<T: Interpolatable> Interpolatable for Vec<T> {
     ///
     /// # Example
     /// ```
+    /// use sherlock::utils::Interpolatable;
+    ///
     /// let vec = vec!["value is '{}'"];
     /// let interpolated_vec = vec.interpolate("test");
     ///
@@ -76,6 +163,7 @@ impl<T: Interpolatable> Interpolatable for HashMap<String, T> {
     /// # Example
     /// ```
     /// use std::collections::HashMap;
+    /// use sherlock::utils::Interpolatable;
     ///
     /// let mut map = HashMap::new();
     /// map.insert("key".to_string(), "value is '{}'".to_string());
