@@ -118,6 +118,8 @@ async fn main() -> Result<()> {
             filtered_targets.clone(),
             cli.timeout,
             cli.proxy.as_ref(),
+            cli.print_all,
+            cli.print_found,
         )
         .await?;
         save_results(

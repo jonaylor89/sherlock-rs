@@ -41,6 +41,8 @@ pub async fn check_username(
     site_data: HashMap<String, TargetInfo>,
     timeout: u64,
     proxy: Option<&String>,
+    print_all: bool,
+    print_found: bool,
 ) -> color_eyre::Result<Vec<QueryResult>> {
     let num_of_sites = site_data.keys().len();
     if num_of_sites == 0 {
@@ -157,7 +159,9 @@ pub async fn check_username(
             }
         };
 
-        print_result(&query_result);
+        if print_all || (print_found && query_result.status == QueryStatus::Claimed) {
+            print_result(&query_result);
+        }
         results.push(query_result);
     }
 
