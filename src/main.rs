@@ -1,10 +1,11 @@
 use clap::Parser;
 use color_eyre::Result;
-use sherlock_rs::{
+use sherlock::{
     get_data::{get_default_data, get_json_data},
     output::save_results,
     sherlock::check_username,
     sherlock_target_manifest::SherlockTargetManifest,
+    utils::create_username_variants,
 };
 
 #[derive(Parser)]
@@ -118,7 +119,9 @@ async fn main() -> Result<()> {
             .collect(),
     };
 
-    for username in cli.usernames {
+    let username_variants = create_username_variants(&cli.usernames);
+
+    for username in username_variants {
         let results = check_username(
             &username,
             filtered_targets.clone(),

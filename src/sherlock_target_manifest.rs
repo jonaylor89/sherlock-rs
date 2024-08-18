@@ -1,3 +1,4 @@
+use core::fmt;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use std::collections::HashMap;
@@ -73,7 +74,7 @@ pub enum ErrorType {
     StatusCode,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Serialize, Deserialize, Clone)]
 #[serde(untagged)]
 pub enum ErrorMsg {
     Single(String),
@@ -85,6 +86,15 @@ impl ErrorMsg {
         match self {
             ErrorMsg::Single(msg) => text.contains(msg),
             ErrorMsg::Multiple(msgs) => msgs.iter().any(|msg| text.contains(msg)),
+        }
+    }
+}
+
+impl fmt::Debug for ErrorMsg {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            ErrorMsg::Single(c) => write!(f, "{}", c),
+            ErrorMsg::Multiple(codes) => codes.iter().fold(Ok(()), |_, c| write!(f, "{}, ", c)),
         }
     }
 }

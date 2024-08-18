@@ -25,16 +25,16 @@
 ## Usage
 
 ```shell
-sherlock-rs user123
+sherlock user123
 ```
 To search for more than one user:
 ```shell
-sherlock-rs user1 user2 user3
+sherlock user1 user2 user3
 ```
 Accounts found will be stored in an individual text file with the corresponding username (e.g user123.txt).
 
 ```shell
-$ sherlock-rs --help
+$ sherlock --help
 
 Hunt down social media accounts by username
 

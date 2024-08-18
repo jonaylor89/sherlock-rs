@@ -1,5 +1,22 @@
 use std::collections::HashMap;
 
+pub fn create_username_variants(usernames: &Vec<String>) -> Vec<String> {
+    let variant_symbol = "{?}";
+    let check_symbols = vec!["_", "-", "."];
+    let variants = usernames
+        .iter()
+        .map(|username| {
+            check_symbols
+                .iter()
+                .map(|symbol| username.replace(variant_symbol, symbol))
+                .collect::<Vec<String>>()
+        })
+        .flatten()
+        .collect();
+
+    variants
+}
+
 pub trait Interpolatable {
     fn interpolate(&self, text: &str) -> Self;
 }

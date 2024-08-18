@@ -1,11 +1,12 @@
 use crate::{
-    interpolate::Interpolatable,
     output::print_result,
     query_result::{QueryResult, QueryStatus},
     sherlock_target_manifest::{ErrorType, RequestMethod, TargetInfo},
+    utils::Interpolatable,
 };
 use color_eyre::eyre;
 use fancy_regex::Regex;
+use rand::seq::SliceRandom;
 use reqwest::{
     header::{HeaderMap, HeaderName, HeaderValue},
     redirect::Policy,
@@ -32,6 +33,7 @@ pub struct RequestResult {
     pub site: String,
     pub info: TargetInfo,
     pub url: String,
+    pub url_probe: String,
     pub response: Result<Response, QueryError>,
     pub query_time: Duration,
 }
@@ -73,6 +75,7 @@ pub async fn check_username(
         let site = result.site;
         let info = result.info;
         let url = result.url;
+        let url_probe = result.url_probe;
         let username = result.username;
 
         let query_result: QueryResult = match result.response {
@@ -152,14 +155,16 @@ pub async fn check_username(
                     println!("+++++++++++++++++++++");
                     println!("TARGET NAME   : {site}");
                     println!("USERNAME      : {username}");
-                    println!("TARGET URL    : {:?}", info.url_probe);
+                    println!("TARGET URL    : {:?}", url_probe);
                     println!("TEST METHOD   : {:?}", error_type);
                     if let Some(error_codes) = &error_code {
                         println!("ERROR CODES   : {:?}", error_codes);
                     }
                     println!("Results...");
                     println!("RESPONSE CODE : {}", status_code);
-                    println!("ERROR TEXT    : {:?}", info.error_msg);
+                    if let Some(error_msg) = &info.error_msg {
+                        println!("ERROR TEXT    : {:?}", error_msg);
+                    }
                     println!(">>>>> BEGIN RESPONSE TEXT");
                     println!("{}", resp_text);
                     println!("<<<<< END RESPONSE TEXT");
@@ -228,6 +233,7 @@ pub fn add_result_to_channel(
                     site,
                     info,
                     url: profile_url,
+                    url_probe,
                     response: Err(QueryError::InvalidUsernameError),
                     query_time: Duration::from_secs(0),
                 };
@@ -269,6 +275,7 @@ pub fn add_result_to_channel(
             site,
             info,
             url: profile_url.clone(),
+            url_probe,
             response: resp.map_err(|_| QueryError::RequestError),
             query_time: duration,
         };
@@ -314,8 +321,22 @@ pub async fn make_request(
         RequestMethod::Head => reqwest::Method::HEAD,
     };
 
-    let req_user_agent = user_agent
-        .unwrap_or("Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/116.0".into());
+    let user_agents = vec![
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36",
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:115.0) Gecko/20100101 Firefox/115.0",
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36 Edg/114.0.1823.67",
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 12_0_1) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.1 Safari/605.1.15",
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 12_0_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36",
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 12.0; rv:115.0) Gecko/20100101 Firefox/115.0",
+        "Mozilla/5.0 (X11; Ubuntu; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36",
+        "Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/116.0",
+    ];
+    let random_agent = user_agents
+        .choose(&mut rand::thread_rng())
+        .unwrap()
+        .to_owned();
+
+    let req_user_agent = user_agent.unwrap_or(random_agent.into());
 
     let mut builder = Client::builder()
         .default_headers(headers_map)
