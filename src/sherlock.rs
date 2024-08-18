@@ -37,7 +37,7 @@ pub struct RequestResult {
 }
 
 pub async fn check_username(
-    username: &String,
+    username: &str,
     site_data: HashMap<String, TargetInfo>,
     timeout: u64,
     proxy: Option<&String>,
@@ -52,11 +52,11 @@ pub async fn check_username(
     // ping sites for username matches
     for (site, info) in site_data.into_iter() {
         add_result_to_channel(
-            username.clone(),
+            username.to_owned(),
             site,
             info,
             timeout,
-            proxy.map(|s| s.clone()),
+            proxy.cloned(),
             tx.clone(),
         )?;
     }
@@ -129,10 +129,8 @@ pub async fn check_username(
                             if error_codes.contains(&status_code) {
                                 status = QueryStatus::Available;
                             }
-                        } else {
-                            if &status_code > &399 || &status_code < &200 {
-                                status = QueryStatus::Available;
-                            }
+                        } else if !(200..=399).contains(&status_code) {
+                            status = QueryStatus::Available;
                         }
 
                         status

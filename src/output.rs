@@ -41,7 +41,7 @@ pub fn save_results(
 
     if let Some(output_folder) = output_folder {
         // make sure the output folder exists
-        std::fs::create_dir_all(&output_folder)?;
+        std::fs::create_dir_all(output_folder)?;
     }
 
     let output_file = match (output_file, output_folder) {
@@ -60,7 +60,7 @@ pub fn save_results(
     writeln!(file, "Total Websites Username Detected On: {}", total_hits)?;
 
     if csv {
-        write_csv(&username, &results, output_folder, print_all, print_found)?;
+        write_csv(username, &results, output_folder, print_all, print_found)?;
     }
 
     if xlsx {

@@ -108,7 +108,7 @@ async fn main() -> Result<()> {
         true => targets,
         false => targets
             .into_iter()
-            .filter(|(site, _)| cli.site_list.contains(&site))
+            .filter(|(site, _)| cli.site_list.contains(site))
             .collect(),
     };
 
