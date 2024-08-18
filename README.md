@@ -69,3 +69,8 @@ Options:
 ```shell
 cargo install sherlock
 ```
+
+## License
+
+MIT © Johannes Naylor<br/>
+Original Creator - [Siddharth Dushantha](https://github.com/sdushantha)
