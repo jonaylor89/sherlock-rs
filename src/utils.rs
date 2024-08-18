@@ -1,51 +1,5 @@
 use std::collections::HashMap;
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_create_username_variants() {
-        let usernames = vec![
-            String::from("user{?}name"),
-            String::from("another{?}user"),
-            String::from("test{?}user"),
-        ];
-        let expected = vec![
-            "user_name",
-            "user-name",
-            "user.name",
-            "another_user",
-            "another-user",
-            "another.user",
-            "test_user",
-            "test-user",
-            "test.user",
-        ];
-        let result = create_username_variants(&usernames);
-        assert_eq!(result, expected);
-    }
-
-    #[test]
-    fn test_create_username_variants_no_symbol() {
-        let usernames = vec![
-            String::from("username"),
-            String::from("anotheruser"),
-            String::from("testuser"),
-        ];
-        let expected = vec!["username", "anotheruser", "testuser"];
-        let result = create_username_variants(&usernames);
-        assert_eq!(result, expected);
-    }
-
-    #[test]
-    fn test_create_username_variants_empty() {
-        let usernames: Vec<String> = vec![];
-        let expected: Vec<String> = vec![];
-        let result = create_username_variants(&usernames);
-        assert_eq!(result, expected);
-    }
-}
 ///
 /// Creates username variants by replacing the variant symbol with check symbols.
 ///
@@ -79,12 +33,12 @@ mod tests {
 ///   "test.user",
 /// ]);
 /// ```
-pub fn create_username_variants(usernames: &Vec<String>) -> Vec<String> {
+pub fn create_username_variants(usernames: &[String]) -> Vec<String> {
     let variant_symbol = "{?}";
     let check_symbols = ["_", "-", "."];
     let variants = usernames
         .iter()
-        .map(|username| {
+        .flat_map(|username| {
             if !username.contains(variant_symbol) {
                 return vec![username.clone()];
             }
@@ -94,7 +48,6 @@ pub fn create_username_variants(usernames: &Vec<String>) -> Vec<String> {
                 .map(|symbol| username.replace(variant_symbol, symbol))
                 .collect::<Vec<String>>()
         })
-        .flatten()
         .collect();
 
     variants
@@ -175,5 +128,52 @@ impl<T: Interpolatable> Interpolatable for HashMap<String, T> {
         self.iter()
             .map(|(key, value)| (key.clone(), value.interpolate(text)))
             .collect()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_create_username_variants() {
+        let usernames = vec![
+            String::from("user{?}name"),
+            String::from("another{?}user"),
+            String::from("test{?}user"),
+        ];
+        let expected = vec![
+            "user_name",
+            "user-name",
+            "user.name",
+            "another_user",
+            "another-user",
+            "another.user",
+            "test_user",
+            "test-user",
+            "test.user",
+        ];
+        let result = create_username_variants(&usernames);
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_create_username_variants_no_symbol() {
+        let usernames = vec![
+            String::from("username"),
+            String::from("anotheruser"),
+            String::from("testuser"),
+        ];
+        let expected = vec!["username", "anotheruser", "testuser"];
+        let result = create_username_variants(&usernames);
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_create_username_variants_empty() {
+        let usernames: Vec<String> = vec![];
+        let expected: Vec<String> = vec![];
+        let result = create_username_variants(&usernames);
+        assert_eq!(result, expected);
     }
 }
