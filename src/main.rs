@@ -64,10 +64,6 @@ struct Cli {
     #[clap(long, alias = "print-found", default_value_t = true)]
     print_found: bool,
 
-    /// Don't color terminal output.
-    #[clap(short, long, alias = "no-color")]
-    no_color: bool,
-
     /// Browse to all results on default browser.
     #[clap(short, long, alias = "browse")]
     browse: bool,
@@ -121,6 +117,7 @@ async fn main() -> Result<()> {
             cli.print_all,
             cli.print_found,
             cli.dump_response,
+            cli.browse,
         )
         .await?;
         save_results(

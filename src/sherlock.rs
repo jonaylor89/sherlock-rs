@@ -44,6 +44,7 @@ pub async fn check_username(
     print_all: bool,
     print_found: bool,
     dump_response: bool,
+    browse: bool,
 ) -> color_eyre::Result<Vec<QueryResult>> {
     let num_of_sites = site_data.keys().len();
     if num_of_sites == 0 {
@@ -165,6 +166,10 @@ pub async fn check_username(
 
                     println!("VERDICT       : {:?}", status);
                     println!("+++++++++++++++++++++");
+                }
+
+                if browse && status == QueryStatus::Claimed {
+                    open::that(&url).inspect_err(|e| eprintln!("Failed to open browser: {}", e))?;
                 }
 
                 QueryResult {
