@@ -78,3 +78,8 @@ I strongly dislike deploying python applications and wanted a single binary. Go 
 
 MIT © Johannes Naylor<br/>
 Original Creator of Sherlock - [Siddharth Dushantha](https://github.com/sdushantha)
+
+## Thanks
+
+- [Siddharth Dushantha](https://github.com/sdushantha) for creating the original Sherlock
+- [Eira Fransham](https://github.com/eira-fransham) for giving me the crate name
