@@ -74,6 +74,20 @@ cargo install sherlock
 
 I strongly dislike deploying python applications and wanted a single binary. Go get's on my nerves, Swift doesn't have great tooling server-side and on linux, C++ isn't even a question, so Rust it is.
 
+## Credits
+
+Thank you to everyone who has contributed to Sherlock! ❤️
+
+<a href="https://github.com/jonaylor89/sherlock-rs/graphs/contributors">
+  <img src="https://contrib.rocks/image?&columns=25&max=10000&&repo=jonaylor89/sherlock-rs" noZoom />
+</a>
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=jonaylor89/sherlock-rs&type=Date&theme=dark" />
+  <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=jonaylor89/sherlock-rs&type=Date" />
+  <img alt="Sherlock Project Star History Chart" src="https://api.star-history.com/svg?repos=jonaylor89/sherlock-rs&type=Date" />
+</picture>
+
 ## License
 
 MIT © Johannes Naylor<br/>
