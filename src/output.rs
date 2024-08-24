@@ -1,4 +1,4 @@
-use crate::query_result::{QueryResult, QueryStatus};
+use crate::query::{QueryResult, QueryStatus};
 use color_eyre::Result;
 use colored::Colorize;
 

@@ -1262,6 +1262,7 @@ dependencies = [
  "colored",
  "fancy-regex",
  "futures",
+ "once_cell",
  "open",
  "rand",
  "regex",
