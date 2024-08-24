@@ -1,7 +1,7 @@
 use clap::Parser;
 use color_eyre::Result;
-use sherlock::
-    checker::check_username,
+use sherlock::{
+    checker::{check_username, CheckOptions},
     get_data::{get_default_data, get_json_data},
     output::save_results,
     sherlock_target_manifest::SherlockTargetManifest,
@@ -125,12 +125,14 @@ async fn main() -> Result<()> {
         let results = check_username(
             &username,
             filtered_targets.clone(),
-            cli.timeout,
-            cli.proxy.as_ref(),
-            cli.print_all,
-            cli.print_found,
-            cli.dump_response,
-            cli.browse,
+            CheckOptions {
+                timeout: cli.timeout,
+                proxy: cli.proxy.clone(),
+                print_all: cli.print_all,
+                print_found: cli.print_found,
+                dump_response: cli.dump_response,
+                browse: cli.browse,
+            },
         )
         .await?;
         save_results(

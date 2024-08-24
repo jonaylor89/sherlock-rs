@@ -9,16 +9,29 @@ use color_eyre::eyre;
 use std::collections::HashMap;
 use tokio::sync::mpsc::channel;
 
+pub struct CheckOptions {
+    pub timeout: u64,
+    pub proxy: Option<String>,
+    pub print_all: bool,
+    pub print_found: bool,
+    pub dump_response: bool,
+    pub browse: bool,
+}
+
 pub async fn check_username(
     username: &str,
     site_data: HashMap<String, TargetInfo>,
-    timeout: u64,
-    proxy: Option<&String>,
-    print_all: bool,
-    print_found: bool,
-    dump_response: bool,
-    browse: bool,
+    options: CheckOptions,
 ) -> color_eyre::Result<Vec<QueryResult>> {
+    let CheckOptions {
+        timeout,
+        proxy,
+        print_all,
+        print_found,
+        dump_response,
+        browse,
+    } = options;
+
     let num_of_sites = site_data.keys().len();
     if num_of_sites == 0 {
         return Err(eyre::eyre!("No sites to check"));
@@ -34,7 +47,7 @@ pub async fn check_username(
             site,
             info,
             timeout,
-            proxy.cloned(),
+            proxy.clone(),
         )?;
     }
 
