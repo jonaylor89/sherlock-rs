@@ -75,7 +75,10 @@ cargo install sherlock
 
 I strongly dislike deploying python applications and wanted a single binary. Go get's on my nerves, Swift doesn't have great tooling server-side and on linux, C++ isn't even a question, so Rust it is.
 
-<blockquote class="reddit-embed-bq" style="height:316px" data-embed-height="374"><a href="https://www.reddit.com/r/github/comments/1at9br4/i_am_new_to_github_and_i_have_lots_to_say/">I am new to GitHub and I have lots to say</a><br> by<a href="https://www.reddit.com/user/automatic_purpose_/">u/automatic_purpose_</a> in<a href="https://www.reddit.com/r/github/">github</a></blockquote><script async="" src="https://embed.reddit.com/widgets.js" charset="UTF-8"></script>
+<p align="center">
+<img width="70%" height="70%" src="docs/images/reddit.png"/>
+</a>
+</p>
 
 ## License
 
