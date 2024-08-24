@@ -21,7 +21,7 @@ pub struct CheckOptions {
 pub async fn check_username(
     username: &str,
     site_data: HashMap<String, TargetInfo>,
-    options: CheckOptions,
+    options: &CheckOptions,
 ) -> color_eyre::Result<Vec<QueryResult>> {
     let CheckOptions {
         timeout,
@@ -46,7 +46,7 @@ pub async fn check_username(
             username.to_owned(),
             site,
             info,
-            timeout,
+            *timeout,
             proxy.clone(),
         )?;
     }
@@ -124,7 +124,7 @@ pub async fn check_username(
                     }
                 };
 
-                if dump_response {
+                if *dump_response {
                     println!("+++++++++++++++++++++");
                     println!("TARGET NAME   : {site}");
                     println!("USERNAME      : {username}");
@@ -146,7 +146,7 @@ pub async fn check_username(
                     println!("+++++++++++++++++++++");
                 }
 
-                if browse && status == QueryStatus::Claimed {
+                if *browse && status == QueryStatus::Claimed {
                     open::that(&url).inspect_err(|e| eprintln!("Failed to open browser: {}", e))?;
                 }
 
@@ -163,7 +163,7 @@ pub async fn check_username(
             }
         };
 
-        if print_all || (print_found && query_result.status == QueryStatus::Claimed) {
+        if *print_all || (*print_found && query_result.status == QueryStatus::Claimed) {
             print_result(&query_result);
         }
         results.push(query_result);

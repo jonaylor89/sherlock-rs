@@ -121,20 +121,17 @@ async fn main() -> Result<()> {
 
     let username_variants = create_username_variants(&cli.usernames);
 
+    let check_options = CheckOptions {
+        timeout: cli.timeout,
+        proxy: cli.proxy.clone(),
+        print_all: cli.print_all,
+        print_found: cli.print_found,
+        dump_response: cli.dump_response,
+        browse: cli.browse,
+    };
+
     for username in username_variants {
-        let results = check_username(
-            &username,
-            filtered_targets.clone(),
-            CheckOptions {
-                timeout: cli.timeout,
-                proxy: cli.proxy.clone(),
-                print_all: cli.print_all,
-                print_found: cli.print_found,
-                dump_response: cli.dump_response,
-                browse: cli.browse,
-            },
-        )
-        .await?;
+        let results = check_username(&username, filtered_targets.clone(), &check_options).await?;
         save_results(
             &username,
             results,
