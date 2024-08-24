@@ -1,5 +1,6 @@
 
 
+
 <p align=center>
   <br>
   <a href="https://sherlock-project.github.io/" target="_blank"><img src="docs/images/sherlock-logo.png"/></a>
@@ -74,19 +75,7 @@ cargo install sherlock
 
 I strongly dislike deploying python applications and wanted a single binary. Go get's on my nerves, Swift doesn't have great tooling server-side and on linux, C++ isn't even a question, so Rust it is.
 
-## Credits
-
-Thank you to everyone who has contributed to Sherlock! ❤️
-
-<a href="https://github.com/jonaylor89/sherlock-rs/graphs/contributors">
-  <img src="https://contrib.rocks/image?&columns=25&max=10000&&repo=jonaylor89/sherlock-rs" noZoom />
-</a>
-
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=jonaylor89/sherlock-rs&type=Date&theme=dark" />
-  <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=jonaylor89/sherlock-rs&type=Date" />
-  <img alt="Sherlock Project Star History Chart" src="https://api.star-history.com/svg?repos=jonaylor89/sherlock-rs&type=Date" />
-</picture>
+<blockquote class="reddit-embed-bq" style="height:316px" data-embed-height="374"><a href="https://www.reddit.com/r/github/comments/1at9br4/i_am_new_to_github_and_i_have_lots_to_say/">I am new to GitHub and I have lots to say</a><br> by<a href="https://www.reddit.com/user/automatic_purpose_/">u/automatic_purpose_</a> in<a href="https://www.reddit.com/r/github/">github</a></blockquote><script async="" src="https://embed.reddit.com/widgets.js" charset="UTF-8"></script>
 
 ## License
 
