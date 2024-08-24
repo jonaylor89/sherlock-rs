@@ -9,6 +9,7 @@ use color_eyre::eyre;
 use std::collections::HashMap;
 use tokio::sync::mpsc::channel;
 
+#[derive(Debug, Clone)]
 pub struct CheckOptions {
     pub timeout: u64,
     pub proxy: Option<String>,
