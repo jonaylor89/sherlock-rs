@@ -3,7 +3,7 @@ use color_eyre::Result;
 use sherlock::{
     checker::{check_username, CheckOptions},
     get_data::{get_default_data, get_json_data},
-    output::save_results,
+    output::{save_results, SaveOptions},
     sherlock_target_manifest::SherlockTargetManifest,
     utils::create_username_variants,
 };
@@ -130,18 +130,18 @@ async fn main() -> Result<()> {
         browse: cli.browse,
     };
 
+    let save_options = SaveOptions {
+        output_file: cli.output_file,
+        output_folder: cli.output_folder,
+        csv: cli.csv,
+        xlsx: cli.xlsx,
+        print_all: cli.print_all,
+        print_found: cli.print_found,
+    };
+
     for username in username_variants {
         let results = check_username(&username, filtered_targets.clone(), &check_options).await?;
-        save_results(
-            &username,
-            results,
-            cli.output_file.as_ref(),
-            cli.output_folder.as_ref(),
-            cli.csv,
-            cli.xlsx,
-            cli.print_all,
-            cli.print_found,
-        )?;
+        save_results(&username, results, &save_options)?;
     }
 
     Ok(())

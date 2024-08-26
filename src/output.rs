@@ -8,6 +8,16 @@ use rust_xlsxwriter::Workbook;
 use std::fs::File;
 use std::io::Write;
 
+/// Options for saving results
+pub struct SaveOptions {
+    pub output_file: Option<String>,
+    pub output_folder: Option<String>,
+    pub csv: bool,
+    pub xlsx: bool,
+    pub print_all: bool,
+    pub print_found: bool,
+}
+
 /// Save the results to a file.
 ///
 /// # Arguments
@@ -25,12 +35,7 @@ use std::io::Write;
 pub fn save_results(
     username: &str,
     results: Vec<QueryResult>,
-    output_file: Option<&String>,
-    output_folder: Option<&String>,
-    csv: bool,
-    xlsx: bool,
-    print_all: bool,
-    print_found: bool,
+    options: &SaveOptions,
 ) -> Result<()> {
     let total_hits = results
         .iter()
@@ -39,12 +44,12 @@ pub fn save_results(
 
     println!("total of {}/{} hits", total_hits, results.len());
 
-    if let Some(output_folder) = output_folder {
+    if let Some(ref output_folder) = options.output_folder {
         // make sure the output folder exists
         std::fs::create_dir_all(output_folder)?;
     }
 
-    let output_file = match (output_file, output_folder) {
+    let output_file = match (&options.output_file, &options.output_folder) {
         (Some(output_file), _) => output_file.to_string(),
         (None, Some(output_folder)) => format!("{}/{}.txt", output_folder, username),
         (None, None) => format!("{}.txt", username),
@@ -59,11 +64,17 @@ pub fn save_results(
 
     writeln!(file, "Total Websites Username Detected On: {}", total_hits)?;
 
-    if csv {
-        write_csv(username, &results, output_folder, print_all, print_found)?;
+    if options.csv {
+        write_csv(
+            username,
+            &results,
+            options.output_folder.as_deref(),
+            options.print_all,
+            options.print_found,
+        )?;
     }
 
-    if xlsx {
+    if options.xlsx {
         #[cfg(feature = "xlsx")]
         write_xlsx(&username, &results, output_folder, print_all, print_found)?;
 
@@ -88,7 +99,7 @@ pub fn save_results(
 pub fn write_xlsx(
     username: &str,
     results: &Vec<QueryResult>,
-    output_folder: Option<&String>,
+    output_folder: Option<&str>,
     print_all: bool,
     print_found: bool,
 ) -> color_eyre::Result<()> {
@@ -146,7 +157,7 @@ pub fn write_xlsx(
 pub fn write_csv(
     username: &str,
     results: &Vec<QueryResult>,
-    output_folder: Option<&String>,
+    output_folder: Option<&str>,
     print_all: bool,
     print_found: bool,
 ) -> color_eyre::Result<()> {
@@ -173,12 +184,12 @@ pub fn write_csv(
 
         writeln!(
             csv_report,
-            "{},{},{},{},{},{},{}",
+            "{},{},{},{},{:?},{},{}",
             username,
             result.site_name,
             result.url_main,
             result.site_url_user,
-            format!("{:?}", result.status),
+            result.status,
             result.http_status.as_ref().unwrap_or(&0),
             response_time_s
         )?;
