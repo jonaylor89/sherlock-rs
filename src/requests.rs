@@ -1,6 +1,6 @@
 use once_cell::sync::Lazy;
 use rand::seq::SliceRandom;
-use std::{collections::HashMap, time::Duration};
+use std::{collections::HashMap, sync::Arc, time::Duration};
 
 use reqwest::{
     header::{HeaderMap, HeaderName, HeaderValue},
@@ -28,9 +28,9 @@ static USER_AGENTS: Lazy<[&str; 8]> = Lazy::new(|| {
 
 #[derive(Debug)]
 pub struct RequestResult {
-    pub username: String,
-    pub site: String,
-    pub info: TargetInfo,
+    pub username: Arc<String>,
+    pub site: Arc<String>,
+    pub info: Arc<TargetInfo>,
     pub url: String,
     pub url_probe: String,
     pub response: Result<Response, QueryError>,

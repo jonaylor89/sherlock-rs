@@ -6,13 +6,13 @@ use crate::{
     waf::waf_hit,
 };
 use color_eyre::eyre;
-use std::collections::HashMap;
+use std::{collections::HashMap, sync::Arc};
 use tokio::sync::mpsc::channel;
 
 #[derive(Debug, Clone)]
 pub struct CheckOptions {
     pub timeout: u64,
-    pub proxy: Option<String>,
+    pub proxy: Arc<Option<String>>,
     pub print_all: bool,
     pub print_found: bool,
     pub dump_response: bool,
@@ -21,7 +21,7 @@ pub struct CheckOptions {
 
 pub async fn check_username(
     username: &str,
-    site_data: HashMap<String, TargetInfo>,
+    site_data: Arc<HashMap<String, Arc<TargetInfo>>>,
     options: &CheckOptions,
 ) -> color_eyre::Result<Vec<QueryResult>> {
     let CheckOptions {
@@ -41,14 +41,15 @@ pub async fn check_username(
     let (tx, mut rx) = channel::<RequestResult>(num_of_sites);
 
     // ping sites for username matches
-    for (site, info) in site_data.into_iter() {
+    let username = Arc::new(username.to_string());
+    for (site, info) in site_data.iter() {
         add_result_to_channel(
             tx.clone(),
-            username.to_owned(),
-            site,
-            info,
+            Arc::clone(&username),
+            Arc::new(site.to_string()),
+            Arc::clone(&info),
             *timeout,
-            proxy.clone(),
+            Arc::clone(proxy),
         )?;
     }
 
@@ -66,9 +67,9 @@ pub async fn check_username(
         let query_result: QueryResult = match result.response {
             Err(e) => match e {
                 QueryError::InvalidUsernameError => QueryResult {
-                    username: username.clone(),
-                    site_name: site,
-                    url_main: info.url_main,
+                    username: Arc::clone(&username),
+                    site_name: Arc::clone(&site),
+                    info: Arc::clone(&info),
                     site_url_user: url,
                     status: QueryStatus::Illegal,
                     http_status: None,
@@ -76,9 +77,9 @@ pub async fn check_username(
                     context: Some(e.to_string()),
                 },
                 QueryError::RequestError => QueryResult {
-                    username: username.clone(),
-                    site_name: site,
-                    url_main: info.url_main,
+                    username: Arc::clone(&username),
+                    site_name: Arc::clone(&site),
+                    info: Arc::clone(&info),
                     site_url_user: url,
                     status: QueryStatus::Unknown,
                     http_status: None,
@@ -91,8 +92,8 @@ pub async fn check_username(
                 let resp_text = response.text().await?;
                 let wfthit = waf_hit(&resp_text);
 
-                let error_type = info.error_type;
-                let error_code = info.error_code;
+                let error_type = &info.error_type;
+                let error_code = &info.error_code;
                 let status = match (wfthit, &error_type) {
                     (true, _) => QueryStatus::Waf,
                     (false, ErrorType::Message) => {
@@ -152,9 +153,9 @@ pub async fn check_username(
                 }
 
                 QueryResult {
-                    username: username.clone(),
-                    site_name: site,
-                    url_main: info.url_main,
+                    username: Arc::clone(&username),
+                    site_name: Arc::clone(&site),
+                    info: Arc::clone(&info),
                     site_url_user: url,
                     status,
                     http_status: Some(status_code),

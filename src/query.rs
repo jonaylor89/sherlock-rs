@@ -1,4 +1,5 @@
 use fancy_regex::Regex;
+use std::sync::Arc;
 use std::time::Duration;
 use std::{fmt, time::Instant};
 use thiserror::Error;
@@ -32,9 +33,9 @@ pub enum QueryStatus {
 
 #[derive(Debug)]
 pub struct QueryResult {
-    pub username: String,
-    pub site_name: String,
-    pub url_main: String,
+    pub username: Arc<String>,
+    pub site_name: Arc<String>,
+    pub info: Arc<TargetInfo>,
     pub site_url_user: String,
     pub status: QueryStatus,
     pub http_status: Option<u16>,
@@ -53,11 +54,11 @@ impl fmt::Display for QueryResult {
 
 pub fn add_result_to_channel(
     sender: Sender<RequestResult>,
-    username: String,
-    site: String,
-    info: TargetInfo,
+    username: Arc<String>,
+    site: Arc<String>,
+    info: Arc<TargetInfo>,
     timeout: u64,
-    proxy: Option<String>,
+    proxy: Arc<Option<String>>,
 ) -> color_eyre::Result<()> {
     let encoded_username = &username.replace(" ", "%20");
     let profile_url = info.url.interpolate(encoded_username);
@@ -81,8 +82,8 @@ pub fn add_result_to_channel(
             if !is_match {
                 // No need to do the check at the site: this username is not allowed.
                 let request_result = RequestResult {
-                    username: username.clone(),
-                    site,
+                    username: Arc::clone(&username),
+                    site: Arc::clone(&site),
                     info,
                     url: profile_url,
                     url_probe,
@@ -123,8 +124,8 @@ pub fn add_result_to_channel(
         let duration = start.elapsed();
 
         let request_result = RequestResult {
-            username: username.clone(),
-            site,
+            username: Arc::clone(&username),
+            site: Arc::clone(&site),
             info,
             url: profile_url.clone(),
             url_probe,

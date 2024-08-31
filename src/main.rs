@@ -1,10 +1,12 @@
+use std::{collections::HashMap, sync::Arc};
+
 use clap::Parser;
 use color_eyre::Result;
 use sherlock::{
     checker::{check_username, CheckOptions},
     get_data::{get_default_data, get_json_data},
     output::{save_results, SaveOptions},
-    sherlock_target_manifest::SherlockTargetManifest,
+    sherlock_target_manifest::{SherlockTargetManifest, TargetInfo},
     utils::create_username_variants,
 };
 
@@ -119,11 +121,17 @@ async fn main() -> Result<()> {
             .collect(),
     };
 
+    let arc_targets = filtered_targets
+        .into_iter()
+        .map(|(site, info)| (site, Arc::new(info)))
+        .collect::<HashMap<String, Arc<TargetInfo>>>();
+    let arc_targets = Arc::new(arc_targets);
+
     let username_variants = create_username_variants(&cli.usernames);
 
     let check_options = CheckOptions {
         timeout: cli.timeout,
-        proxy: cli.proxy.clone(),
+        proxy: Arc::new(cli.proxy),
         print_all: cli.print_all,
         print_found: cli.print_found,
         dump_response: cli.dump_response,
@@ -140,7 +148,7 @@ async fn main() -> Result<()> {
     };
 
     for username in username_variants {
-        let results = check_username(&username, filtered_targets.clone(), &check_options).await?;
+        let results = check_username(&username, Arc::clone(&arc_targets), &check_options).await?;
         save_results(&username, results, &save_options)?;
     }
 

@@ -187,7 +187,7 @@ pub fn write_csv(
             "{},{},{},{},{:?},{},{}",
             username,
             result.site_name,
-            result.url_main,
+            result.info.url_main,
             result.site_url_user,
             result.status,
             result.http_status.as_ref().unwrap_or(&0),
