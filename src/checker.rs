@@ -34,7 +34,7 @@ pub async fn check_username(
         browse,
     } = options;
 
-    let num_of_sites = site_data.keys().len();
+    let num_of_sites = site_data.len();
     if num_of_sites == 0 {
         return Err(eyre::eyre!("No sites to check"));
     }
@@ -57,7 +57,7 @@ pub async fn check_username(
     drop(tx);
 
     // save to output data struct
-    let mut results = vec![];
+    let mut results = Vec::with_capacity(site_data.len());
     while let Some(result) = rx.recv().await {
         let RequestResult {
             username,
