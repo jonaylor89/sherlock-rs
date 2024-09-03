@@ -57,6 +57,7 @@ struct Cli {
     #[clap(
         short,
         long = "json",
+        conflicts_with = "local",
         default_value = "https://raw.githubusercontent.com/sherlock-project/sherlock/master/sherlock_project/resources/data.json"
     )]
     json_file: String,
