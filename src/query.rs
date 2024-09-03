@@ -33,8 +33,8 @@ pub enum QueryStatus {
 
 #[derive(Debug)]
 pub struct QueryResult {
-    pub username: Arc<String>,
-    pub site_name: Arc<String>,
+    pub username: Arc<str>,
+    pub site_name: Arc<str>,
     pub info: Arc<TargetInfo>,
     pub site_url_user: String,
     pub status: QueryStatus,
@@ -54,11 +54,11 @@ impl fmt::Display for QueryResult {
 
 pub fn add_result_to_channel(
     sender: Sender<RequestResult>,
-    username: Arc<String>,
-    site: Arc<String>,
+    username: Arc<str>,
+    site: Arc<str>,
     info: Arc<TargetInfo>,
     timeout: u64,
-    proxy: Arc<Option<String>>,
+    proxy: Option<Arc<str>>,
 ) -> color_eyre::Result<()> {
     let encoded_username = &username.replace(" ", "%20");
     let profile_url = info.url.interpolate(encoded_username);

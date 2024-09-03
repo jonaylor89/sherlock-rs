@@ -12,7 +12,7 @@ use tokio::sync::mpsc::channel;
 #[derive(Debug, Clone)]
 pub struct CheckOptions {
     pub timeout: u64,
-    pub proxy: Arc<Option<String>>,
+    pub proxy: Option<Arc<str>>,
     pub print_all: bool,
     pub print_found: bool,
     pub dump_response: bool,
@@ -41,15 +41,15 @@ pub async fn check_username(
     let (tx, mut rx) = channel::<RequestResult>(num_of_sites);
 
     // ping sites for username matches
-    let username = Arc::new(username.to_string());
+    let username = Arc::from(username);
     for (site, info) in site_data.iter() {
         add_result_to_channel(
             tx.clone(),
             Arc::clone(&username),
-            Arc::new(site.to_string()),
+            Arc::from(&site[..]),
             Arc::clone(&info),
             *timeout,
-            Arc::clone(proxy),
+            proxy.clone(),
         )?;
     }
 
@@ -58,11 +58,14 @@ pub async fn check_username(
     // save to output data struct
     let mut results = vec![];
     while let Some(result) = rx.recv().await {
-        let site = result.site;
-        let info = result.info;
-        let url = result.url;
-        let url_probe = result.url_probe;
-        let username = result.username;
+        let RequestResult {
+            username,
+            site,
+            info,
+            url,
+            url_probe,
+            ..
+        } = result;
 
         let query_result: QueryResult = match result.response {
             Err(e) => match e {

@@ -28,8 +28,8 @@ static USER_AGENTS: Lazy<[&str; 8]> = Lazy::new(|| {
 
 #[derive(Debug)]
 pub struct RequestResult {
-    pub username: Arc<String>,
-    pub site: Arc<String>,
+    pub username: Arc<str>,
+    pub site: Arc<str>,
     pub info: Arc<TargetInfo>,
     pub url: String,
     pub url_probe: String,

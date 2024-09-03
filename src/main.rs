@@ -131,7 +131,7 @@ async fn main() -> Result<()> {
 
     let check_options = CheckOptions {
         timeout: cli.timeout,
-        proxy: Arc::new(cli.proxy),
+        proxy: cli.proxy.map(Arc::from),
         print_all: cli.print_all,
         print_found: cli.print_found,
         dump_response: cli.dump_response,
