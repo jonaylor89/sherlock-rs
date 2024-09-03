@@ -96,13 +96,13 @@ pub fn add_result_to_channel(
             }
         }
 
-        let allow_redirects = !matches!(info.error_type, ErrorType::ResponseUrl);
+        let allow_redirects = !matches!(info.error_type, ErrorType::ResponseUrl { .. });
 
         let req_method = info.request_method.unwrap_or(match info.error_type {
             // In most cases when we are detecting by status code,
             // it is not necessary to get the entire body:  we can
             // detect fine with just the HEAD response.
-            ErrorType::StatusCode => RequestMethod::Head,
+            ErrorType::StatusCode { .. } => RequestMethod::Head,
             // Either this detect method needs the content associated
             // with the GET response, or this specific website will
             // not respond properly unless we request the whole page.

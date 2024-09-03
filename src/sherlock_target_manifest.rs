@@ -38,16 +38,29 @@ pub struct TargetInfo {
     pub tags: Option<Tags>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub request_method: Option<RequestMethod>,
-    #[serde(rename = "errorType")]
+
+    #[serde(flatten)]
     pub error_type: ErrorType,
-    #[serde(skip_serializing_if = "Option::is_none", rename = "errorMsg", default)]
-    pub error_msg: Option<ErrorMsg>,
-    #[serde(skip_serializing_if = "Option::is_none", rename = "errorCode", default)]
-    pub error_code: Option<ErrorCode>,
-    #[serde(skip_serializing_if = "Option::is_none", rename = "errorUrl", default)]
-    pub error_url: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    pub response_url: Option<String>,
+    // The json schema says there is a `response_url` field, but it is not present
+    // in any of the targets in the official repository
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+#[serde(tag = "errorType", rename_all = "snake_case")]
+pub enum ErrorType {
+    Message {
+        #[serde(rename = "errorMsg")]
+        msg: ErrorMsg,
+    },
+    ResponseUrl {
+        #[serde(rename = "errorUrl")]
+        url: String,
+    },
+    StatusCode {
+        #[serde(rename = "errorCode")]
+        #[serde(skip_serializing_if = "Option::is_none", default)]
+        codes: Option<ErrorCode>,
+    },
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -64,14 +77,6 @@ pub enum RequestMethod {
     Post,
     Head,
     Put,
-}
-
-#[derive(Debug, Serialize, Deserialize, Clone)]
-#[serde(rename_all = "snake_case")]
-pub enum ErrorType {
-    Message,
-    ResponseUrl,
-    StatusCode,
 }
 
 #[derive(Serialize, Deserialize, Clone)]

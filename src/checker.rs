@@ -93,21 +93,20 @@ pub async fn check_username(
                 let wfthit = waf_hit(&resp_text);
 
                 let error_type = &info.error_type;
-                let error_code = &info.error_code;
-                let status = match (wfthit, &error_type) {
+                let status = match (wfthit, error_type) {
                     (true, _) => QueryStatus::Waf,
-                    (false, ErrorType::Message) => {
-                        let error_flag = info.error_msg.iter().any(|msg| msg.is_in(&resp_text));
+                    (false, ErrorType::Message { msg }) => {
+                        let error_flag = msg.is_in(&resp_text);
                         if error_flag {
                             QueryStatus::Available
                         } else {
                             QueryStatus::Claimed
                         }
                     }
-                    (false, ErrorType::StatusCode) => {
+                    (false, ErrorType::StatusCode { codes }) => {
                         let mut status = QueryStatus::Claimed;
 
-                        if let Some(error_codes) = &error_code {
+                        if let Some(error_codes) = codes {
                             if error_codes.contains(&status_code) {
                                 status = QueryStatus::Available;
                             }
@@ -117,7 +116,7 @@ pub async fn check_username(
 
                         status
                     }
-                    (false, ErrorType::ResponseUrl) => {
+                    (false, ErrorType::ResponseUrl { .. }) => {
                         if (200..300).contains(&status_code) {
                             QueryStatus::Claimed
                         } else {
@@ -131,15 +130,10 @@ pub async fn check_username(
                     println!("TARGET NAME   : {site}");
                     println!("USERNAME      : {username}");
                     println!("TARGET URL    : {:?}", url_probe);
+                    // TODO: Split this out into parts? Impl debug differently?
                     println!("TEST METHOD   : {:?}", error_type);
-                    if let Some(error_codes) = &error_code {
-                        println!("ERROR CODES   : {:?}", error_codes);
-                    }
                     println!("Results...");
                     println!("RESPONSE CODE : {}", status_code);
-                    if let Some(error_msg) = &info.error_msg {
-                        println!("ERROR TEXT    : {:?}", error_msg);
-                    }
                     println!(">>>>> BEGIN RESPONSE TEXT");
                     println!("{}", resp_text);
                     println!("<<<<< END RESPONSE TEXT");
