@@ -41,7 +41,7 @@ pub async fn make_request(
     url: &str,
     headers: Option<HashMap<String, String>>,
     allow_redirects: bool,
-    timeout: std::time::Duration,
+    timeout: Duration,
     method: RequestMethod,
     request_payload: Option<String>,
     proxy: Option<&str>,

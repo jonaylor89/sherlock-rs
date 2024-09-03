@@ -57,7 +57,7 @@ pub fn add_result_to_channel(
     username: Arc<str>,
     site: Arc<str>,
     info: Arc<TargetInfo>,
-    timeout: u64,
+    timeout: Duration,
     proxy: Option<Arc<str>>,
 ) -> color_eyre::Result<()> {
     let encoded_username = &username.replace(" ", "%20");
@@ -114,7 +114,7 @@ pub fn add_result_to_channel(
             &url_probe,
             info.headers.clone(),
             allow_redirects,
-            Duration::from_secs(timeout),
+            timeout,
             req_method,
             request_body,
             proxy.as_deref(),

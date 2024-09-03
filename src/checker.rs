@@ -6,12 +6,13 @@ use crate::{
     waf::waf_hit,
 };
 use color_eyre::eyre;
+use std::time::Duration;
 use std::{collections::HashMap, sync::Arc};
 use tokio::sync::mpsc::channel;
 
 #[derive(Debug, Clone)]
 pub struct CheckOptions {
-    pub timeout: u64,
+    pub timeout: Duration,
     pub proxy: Option<Arc<str>>,
     pub print_all: bool,
     pub print_found: bool,
