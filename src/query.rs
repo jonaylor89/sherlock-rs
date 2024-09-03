@@ -71,7 +71,7 @@ pub fn add_result_to_channel(
 
     let request_body = info
         .request_payload
-        .clone()
+        .as_ref()
         .map(|payload| payload.to_string().interpolate(&username));
 
     tokio::spawn(async move {
