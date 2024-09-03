@@ -69,28 +69,22 @@ pub async fn check_username(
         } = result;
 
         let query_result: QueryResult = match result.response {
-            Err(e) => match e {
-                QueryError::InvalidUsernameError => QueryResult {
+            Err(e) => {
+                let status = match e {
+                    QueryError::InvalidUsernameError => QueryStatus::Illegal,
+                    QueryError::RequestError | QueryError::RegexError(_) => QueryStatus::Unknown,
+                };
+                QueryResult {
                     username: Arc::clone(&username),
                     site_name: Arc::clone(&site),
                     info: Arc::clone(&info),
                     site_url_user: url,
-                    status: QueryStatus::Illegal,
+                    status,
                     http_status: None,
                     query_time: result.query_time,
                     context: Some(e.to_string()),
-                },
-                QueryError::RequestError => QueryResult {
-                    username: Arc::clone(&username),
-                    site_name: Arc::clone(&site),
-                    info: Arc::clone(&info),
-                    site_url_user: url,
-                    status: QueryStatus::Unknown,
-                    http_status: None,
-                    query_time: result.query_time,
-                    context: Some(e.to_string()),
-                },
-            },
+                }
+            }
             Ok(response) => {
                 let status_code = response.status().as_u16();
                 let resp_text = response.text().await?;
