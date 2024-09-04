@@ -1,6 +1,5 @@
-use std::{fs::File, io::Read, path::Path};
-
 use color_eyre::eyre;
+use color_eyre::eyre::WrapErr;
 
 pub async fn get_json_data(json_file: String) -> color_eyre::Result<String> {
     // Ensure that the specified data file has the correct extension.
@@ -35,17 +34,12 @@ pub async fn get_json_data(json_file: String) -> color_eyre::Result<String> {
         }
         false => {
             // Reference is to a file.
-            let path = Path::new(&json_file);
-
-            let mut file = File::open(path).map_err(|_| {
-                eyre::eyre!(
-                    "Problem while attempting to access data file '{}'.",
+            let contents = std::fs::read_to_string(&json_file).wrap_err_with(|| {
+                format!(
+                    "Problem while attempting to access data file '{}'",
                     json_file
                 )
             })?;
-
-            let mut contents = String::new();
-            file.read_to_string(&mut contents)?;
 
             contents
         }
