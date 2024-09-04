@@ -64,7 +64,7 @@ pub fn add_result_to_channel(
     proxy: Option<Arc<str>>,
 ) -> color_eyre::Result<()> {
     tokio::spawn(async move {
-        let encoded_username = &username.replace(" ", "%20");
+        let encoded_username = &username.replace(' ', "%20");
         let profile_url = info.url.interpolate(encoded_username);
         let url_probe = match &info.url_probe {
             // There is a special URL for probing existence separate
@@ -105,12 +105,12 @@ async fn check_user_at_site(
     let request_body = info
         .request_payload
         .as_ref()
-        .map(|payload| payload.to_string().interpolate(&username));
+        .map(|payload| payload.to_string().interpolate(username));
 
     // use regex to make sure the url and username are valid for the site
     if let Some(regex) = &info.regex_check {
         let re = Regex::new(regex)?;
-        let is_match = re.is_match(&username).unwrap_or(false);
+        let is_match = re.is_match(username).unwrap_or(false);
         if !is_match {
             return Err(QueryError::InvalidUsernameError);
         }

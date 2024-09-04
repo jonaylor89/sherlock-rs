@@ -87,6 +87,7 @@ pub enum ErrorMsg {
 }
 
 impl ErrorMsg {
+    #[must_use]
     pub fn is_in(&self, text: &str) -> bool {
         match self {
             ErrorMsg::Single(msg) => text.contains(msg),
@@ -98,8 +99,8 @@ impl ErrorMsg {
 impl fmt::Debug for ErrorMsg {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            ErrorMsg::Single(c) => write!(f, "{}", c),
-            ErrorMsg::Multiple(codes) => codes.iter().fold(Ok(()), |_, c| write!(f, "{}, ", c)),
+            ErrorMsg::Single(c) => write!(f, "{c}"),
+            ErrorMsg::Multiple(codes) => codes.iter().fold(Ok(()), |_, c| write!(f, "{c}, ")),
         }
     }
 }
@@ -112,6 +113,7 @@ pub enum ErrorCode {
 }
 
 impl ErrorCode {
+    #[must_use]
     pub fn contains(&self, code: &u16) -> bool {
         match self {
             ErrorCode::Single(c) => c == code,

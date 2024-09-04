@@ -48,7 +48,7 @@ pub async fn check_username(
             tx.clone(),
             Arc::clone(&username),
             Arc::from(&site[..]),
-            Arc::clone(&info),
+            Arc::clone(info),
             *timeout,
             proxy.clone(),
         )?;
@@ -127,21 +127,21 @@ pub async fn check_username(
                     println!("+++++++++++++++++++++");
                     println!("TARGET NAME   : {site}");
                     println!("USERNAME      : {username}");
-                    println!("TARGET URL    : {:?}", url_probe);
+                    println!("TARGET URL    : {url_probe:?}");
                     // TODO: Split this out into parts? Impl debug differently?
-                    println!("TEST METHOD   : {:?}", error_type);
+                    println!("TEST METHOD   : {error_type:?}");
                     println!("Results...");
-                    println!("RESPONSE CODE : {}", status_code);
+                    println!("RESPONSE CODE : {status_code}");
                     println!(">>>>> BEGIN RESPONSE TEXT");
-                    println!("{}", resp_text);
+                    println!("{resp_text}");
                     println!("<<<<< END RESPONSE TEXT");
 
-                    println!("VERDICT       : {:?}", status);
+                    println!("VERDICT       : {status:?}");
                     println!("+++++++++++++++++++++");
                 }
 
                 if *browse && status == QueryStatus::Claimed {
-                    open::that(&url).inspect_err(|e| eprintln!("Failed to open browser: {}", e))?;
+                    open::that(&url).inspect_err(|e| eprintln!("Failed to open browser: {e}"))?;
                 }
 
                 QueryResult {

@@ -34,14 +34,9 @@ pub async fn get_json_data(json_file: String) -> color_eyre::Result<String> {
         }
         false => {
             // Reference is to a file.
-            let contents = std::fs::read_to_string(&json_file).wrap_err_with(|| {
-                format!(
-                    "Problem while attempting to access data file '{}'",
-                    json_file
-                )
-            })?;
-
-            contents
+            std::fs::read_to_string(&json_file).wrap_err_with(|| {
+                format!("Problem while attempting to access data file '{json_file}'")
+            })?
         }
     };
 
@@ -50,6 +45,7 @@ pub async fn get_json_data(json_file: String) -> color_eyre::Result<String> {
 
 /// the default sites to check for sherlock locally
 /// includes >400 websites and their error messages
+#[must_use]
 pub fn get_default_data() -> String {
     include_str!("data.json").to_string()
 }

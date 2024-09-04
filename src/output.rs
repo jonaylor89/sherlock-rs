@@ -51,8 +51,8 @@ pub fn save_results(
 
     let output_file = match (&options.output_file, &options.output_folder) {
         (Some(output_file), _) => output_file.to_string(),
-        (None, Some(output_folder)) => format!("{}/{}.txt", output_folder, username),
-        (None, None) => format!("{}.txt", username),
+        (None, Some(output_folder)) => format!("{output_folder}/{username}.txt"),
+        (None, None) => format!("{username}.txt"),
     };
 
     let mut file = File::create(&output_file)?;
@@ -62,7 +62,7 @@ pub fn save_results(
         }
     }
 
-    writeln!(file, "Total Websites Username Detected On: {}", total_hits)?;
+    writeln!(file, "Total Websites Username Detected On: {total_hits}")?;
 
     if options.csv {
         write_csv(
@@ -162,8 +162,8 @@ pub fn write_csv(
     print_found: bool,
 ) -> color_eyre::Result<()> {
     let csv_filename = match output_folder {
-        None => format!("{}.csv", username),
-        Some(folder) => format!("{}/{}.csv", folder, username),
+        None => format!("{username}.csv"),
+        Some(folder) => format!("{folder}/{username}.csv"),
     };
 
     let mut csv_report = File::create(csv_filename)?;
