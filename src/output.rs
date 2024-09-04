@@ -34,7 +34,7 @@ pub struct SaveOptions {
 /// A Result containing the success or failure of the operation.
 pub fn save_results(
     username: &str,
-    results: Vec<QueryResult>,
+    results: &[QueryResult],
     options: &SaveOptions,
 ) -> Result<()> {
     let total_hits = results
@@ -56,7 +56,7 @@ pub fn save_results(
     };
 
     let mut file = File::create(&output_file)?;
-    for result in &results {
+    for result in results {
         if result.status == QueryStatus::Claimed {
             writeln!(file, "{}", result.site_url_user)?;
         }
@@ -156,7 +156,7 @@ pub fn write_xlsx(
 /// A Result containing the success or failure of the operation.
 pub fn write_csv(
     username: &str,
-    results: &Vec<QueryResult>,
+    results: &[QueryResult],
     output_folder: Option<&str>,
     print_all: bool,
     print_found: bool,

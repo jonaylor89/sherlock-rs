@@ -150,7 +150,7 @@ async fn main() -> Result<()> {
 
     for username in username_variants {
         let results = check_username(&username, Arc::clone(&arc_targets), &check_options).await?;
-        save_results(&username, results, &save_options)?;
+        save_results(&username, &results, &save_options)?;
     }
 
     Ok(())
