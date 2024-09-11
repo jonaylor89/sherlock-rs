@@ -1,5 +1,3 @@
-use std::{collections::HashMap, sync::Arc};
-
 use clap::Parser;
 use color_eyre::Result;
 use sherlock::{
@@ -9,6 +7,8 @@ use sherlock::{
     sherlock_target_manifest::{SherlockTargetManifest, TargetInfo},
     utils::create_username_variants,
 };
+use std::time::Duration;
+use std::{collections::HashMap, sync::Arc};
 
 #[derive(Parser)]
 #[command(version, about, long_about = None)]
@@ -57,13 +57,14 @@ struct Cli {
     #[clap(
         short,
         long = "json",
+        conflicts_with = "local",
         default_value = "https://raw.githubusercontent.com/sherlock-project/sherlock/master/sherlock_project/resources/data.json"
     )]
     json_file: String,
 
     /// Time (in seconds) to wait for response to requests.
-    #[clap(short, long, alias = "timeout", default_value_t = 60)]
-    timeout: u64,
+    #[clap(short, long, alias = "timeout", default_value_t = 60.0)]
+    timeout: f64,
 
     /// Output sites where the username was not found.
     #[clap(long, alias = "print-all")]
@@ -130,8 +131,8 @@ async fn main() -> Result<()> {
     let username_variants = create_username_variants(&cli.usernames);
 
     let check_options = CheckOptions {
-        timeout: cli.timeout,
-        proxy: Arc::new(cli.proxy),
+        timeout: Duration::from_secs_f64(cli.timeout),
+        proxy: cli.proxy.map(Arc::from),
         print_all: cli.print_all,
         print_found: cli.print_found,
         dump_response: cli.dump_response,
@@ -149,7 +150,7 @@ async fn main() -> Result<()> {
 
     for username in username_variants {
         let results = check_username(&username, Arc::clone(&arc_targets), &check_options).await?;
-        save_results(&username, results, &save_options)?;
+        save_results(&username, &results, &save_options)?;
     }
 
     Ok(())

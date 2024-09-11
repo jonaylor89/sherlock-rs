@@ -38,16 +38,29 @@ pub struct TargetInfo {
     pub tags: Option<Tags>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub request_method: Option<RequestMethod>,
-    #[serde(rename = "errorType")]
+
+    #[serde(flatten)]
     pub error_type: ErrorType,
-    #[serde(skip_serializing_if = "Option::is_none", rename = "errorMsg", default)]
-    pub error_msg: Option<ErrorMsg>,
-    #[serde(skip_serializing_if = "Option::is_none", rename = "errorCode", default)]
-    pub error_code: Option<ErrorCode>,
-    #[serde(skip_serializing_if = "Option::is_none", rename = "errorUrl", default)]
-    pub error_url: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    pub response_url: Option<String>,
+    // The json schema says there is a `response_url` field, but it is not present
+    // in any of the targets in the official repository
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+#[serde(tag = "errorType", rename_all = "snake_case")]
+pub enum ErrorType {
+    Message {
+        #[serde(rename = "errorMsg")]
+        msg: ErrorMsg,
+    },
+    ResponseUrl {
+        #[serde(rename = "errorUrl")]
+        url: String,
+    },
+    StatusCode {
+        #[serde(rename = "errorCode")]
+        #[serde(skip_serializing_if = "Option::is_none", default)]
+        codes: Option<ErrorCode>,
+    },
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -66,14 +79,6 @@ pub enum RequestMethod {
     Put,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
-#[serde(rename_all = "snake_case")]
-pub enum ErrorType {
-    Message,
-    ResponseUrl,
-    StatusCode,
-}
-
 #[derive(Serialize, Deserialize, Clone)]
 #[serde(untagged)]
 pub enum ErrorMsg {
@@ -82,6 +87,7 @@ pub enum ErrorMsg {
 }
 
 impl ErrorMsg {
+    #[must_use]
     pub fn is_in(&self, text: &str) -> bool {
         match self {
             ErrorMsg::Single(msg) => text.contains(msg),
@@ -93,8 +99,8 @@ impl ErrorMsg {
 impl fmt::Debug for ErrorMsg {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            ErrorMsg::Single(c) => write!(f, "{}", c),
-            ErrorMsg::Multiple(codes) => codes.iter().fold(Ok(()), |_, c| write!(f, "{}, ", c)),
+            ErrorMsg::Single(c) => write!(f, "{c}"),
+            ErrorMsg::Multiple(codes) => codes.iter().fold(Ok(()), |_, c| write!(f, "{c}, ")),
         }
     }
 }
@@ -107,6 +113,7 @@ pub enum ErrorCode {
 }
 
 impl ErrorCode {
+    #[must_use]
     pub fn contains(&self, code: &u16) -> bool {
         match self {
             ErrorCode::Single(c) => c == code,

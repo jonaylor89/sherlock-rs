@@ -34,7 +34,7 @@ pub struct SaveOptions {
 /// A Result containing the success or failure of the operation.
 pub fn save_results(
     username: &str,
-    results: Vec<QueryResult>,
+    results: &[QueryResult],
     options: &SaveOptions,
 ) -> Result<()> {
     let total_hits = results
@@ -51,18 +51,18 @@ pub fn save_results(
 
     let output_file = match (&options.output_file, &options.output_folder) {
         (Some(output_file), _) => output_file.to_string(),
-        (None, Some(output_folder)) => format!("{}/{}.txt", output_folder, username),
-        (None, None) => format!("{}.txt", username),
+        (None, Some(output_folder)) => format!("{output_folder}/{username}.txt"),
+        (None, None) => format!("{username}.txt"),
     };
 
     let mut file = File::create(&output_file)?;
-    for result in &results {
+    for result in results {
         if result.status == QueryStatus::Claimed {
             writeln!(file, "{}", result.site_url_user)?;
         }
     }
 
-    writeln!(file, "Total Websites Username Detected On: {}", total_hits)?;
+    writeln!(file, "Total Websites Username Detected On: {total_hits}")?;
 
     if options.csv {
         write_csv(
@@ -156,14 +156,14 @@ pub fn write_xlsx(
 /// A Result containing the success or failure of the operation.
 pub fn write_csv(
     username: &str,
-    results: &Vec<QueryResult>,
+    results: &[QueryResult],
     output_folder: Option<&str>,
     print_all: bool,
     print_found: bool,
 ) -> color_eyre::Result<()> {
     let csv_filename = match output_folder {
-        None => format!("{}.csv", username),
-        Some(folder) => format!("{}/{}.csv", folder, username),
+        None => format!("{username}.csv"),
+        Some(folder) => format!("{folder}/{username}.csv"),
     };
 
     let mut csv_report = File::create(csv_filename)?;

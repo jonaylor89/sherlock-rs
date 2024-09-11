@@ -1,4 +1,3 @@
-use once_cell::sync::Lazy;
 use rand::seq::SliceRandom;
 use std::{collections::HashMap, sync::Arc, time::Duration};
 
@@ -13,8 +12,7 @@ use crate::{
     sherlock_target_manifest::{RequestMethod, TargetInfo},
 };
 
-static USER_AGENTS: Lazy<[&str; 8]> = Lazy::new(|| {
-    [
+const USER_AGENTS: [&str; 8] = [
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36",
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:115.0) Gecko/20100101 Firefox/115.0",
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36 Edg/114.0.1823.67",
@@ -23,13 +21,12 @@ static USER_AGENTS: Lazy<[&str; 8]> = Lazy::new(|| {
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 12.0; rv:115.0) Gecko/20100101 Firefox/115.0",
     "Mozilla/5.0 (X11; Ubuntu; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36",
     "Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/116.0",
-]
-});
+];
 
 #[derive(Debug)]
 pub struct RequestResult {
-    pub username: Arc<String>,
-    pub site: Arc<String>,
+    pub username: Arc<str>,
+    pub site: Arc<str>,
     pub info: Arc<TargetInfo>,
     pub url: String,
     pub url_probe: String,
@@ -41,7 +38,7 @@ pub async fn make_request(
     url: &str,
     headers: Option<HashMap<String, String>>,
     allow_redirects: bool,
-    timeout: std::time::Duration,
+    timeout: Duration,
     method: RequestMethod,
     request_payload: Option<String>,
     proxy: Option<&str>,

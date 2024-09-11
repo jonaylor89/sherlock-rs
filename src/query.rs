@@ -1,4 +1,5 @@
 use fancy_regex::Regex;
+use reqwest::Response;
 use std::sync::Arc;
 use std::time::Duration;
 use std::{fmt, time::Instant};
@@ -15,6 +16,8 @@ pub enum QueryError {
     InvalidUsernameError,
     #[error("Request error")]
     RequestError,
+    #[error(transparent)]
+    RegexError(#[from] fancy_regex::Error),
 }
 
 #[derive(Debug, PartialEq, Eq)]
@@ -33,8 +36,8 @@ pub enum QueryStatus {
 
 #[derive(Debug)]
 pub struct QueryResult {
-    pub username: Arc<String>,
-    pub site_name: Arc<String>,
+    pub username: Arc<str>,
+    pub site_name: Arc<str>,
     pub info: Arc<TargetInfo>,
     pub site_url_user: String,
     pub status: QueryStatus,
@@ -54,90 +57,85 @@ impl fmt::Display for QueryResult {
 
 pub fn add_result_to_channel(
     sender: Sender<RequestResult>,
-    username: Arc<String>,
-    site: Arc<String>,
+    username: Arc<str>,
+    site: Arc<str>,
     info: Arc<TargetInfo>,
-    timeout: u64,
-    proxy: Arc<Option<String>>,
+    timeout: Duration,
+    proxy: Option<Arc<str>>,
 ) -> color_eyre::Result<()> {
-    let encoded_username = &username.replace(" ", "%20");
-    let profile_url = info.url.interpolate(encoded_username);
-    let url_probe = match &info.url_probe {
-        // There is a special URL for probing existence separate
-        // from where the user profile normally can be found.
-        Some(url_probe) => url_probe.interpolate(encoded_username),
-        None => info.url.interpolate(encoded_username),
-    };
-
-    let request_body = info
-        .request_payload
-        .clone()
-        .map(|payload| payload.to_string().interpolate(&username));
-
     tokio::spawn(async move {
-        // use regex to make sure the url and username are valid for the site
-        if let Some(regex) = &info.regex_check {
-            let re = Regex::new(regex)?;
-            let is_match = re.is_match(&username)?;
-            if !is_match {
-                // No need to do the check at the site: this username is not allowed.
-                let request_result = RequestResult {
-                    username: Arc::clone(&username),
-                    site: Arc::clone(&site),
-                    info,
-                    url: profile_url,
-                    url_probe,
-                    response: Err(QueryError::InvalidUsernameError),
-                    query_time: Duration::from_secs(0),
-                };
-
-                sender.send(request_result).await?;
-                return Ok::<_, color_eyre::eyre::Report>(());
-            }
-        }
-
-        let allow_redirects = !matches!(info.error_type, ErrorType::ResponseUrl);
-
-        let req_method = info.request_method.unwrap_or(match info.error_type {
-            // In most cases when we are detecting by status code,
-            // it is not necessary to get the entire body:  we can
-            // detect fine with just the HEAD response.
-            ErrorType::StatusCode => RequestMethod::Head,
-            // Either this detect method needs the content associated
-            // with the GET response, or this specific website will
-            // not respond properly unless we request the whole page.
-            _ => RequestMethod::Get,
-        });
+        let encoded_username = &username.replace(' ', "%20");
+        let profile_url = info.url.interpolate(encoded_username);
+        let url_probe = match &info.url_probe {
+            // There is a special URL for probing existence separate
+            // from where the user profile normally can be found.
+            Some(url_probe) => url_probe.interpolate(encoded_username),
+            None => info.url.interpolate(encoded_username),
+        };
 
         let start = Instant::now();
-        let resp = make_request(
-            &url_probe,
-            info.headers.clone(),
-            allow_redirects,
-            Duration::from_secs(timeout),
-            req_method,
-            request_body,
-            proxy.as_deref(),
-            None,
-        )
-        .await;
+        let response =
+            check_user_at_site(&username, &url_probe, &info, timeout, proxy.as_deref()).await;
         let duration = start.elapsed();
 
         let request_result = RequestResult {
-            username: Arc::clone(&username),
-            site: Arc::clone(&site),
+            username,
+            site,
             info,
             url: profile_url.clone(),
             url_probe,
-            response: resp.map_err(|_| QueryError::RequestError),
+            response,
             query_time: duration,
         };
 
-        // send to channel
-        sender.send(request_result).await?;
-
-        Ok(())
+        // send to channel, ignore if the receiver has been dropped
+        let _ = sender.send(request_result).await;
     });
 
     Ok(())
+}
+
+async fn check_user_at_site(
+    username: &str,
+    url_probe: &str,
+    info: &TargetInfo,
+    timeout: Duration,
+    proxy: Option<&str>,
+) -> Result<Response, QueryError> {
+    let request_body = info
+        .request_payload
+        .as_ref()
+        .map(|payload| payload.to_string().interpolate(username));
+
+    // use regex to make sure the url and username are valid for the site
+    if let Some(regex) = &info.regex_check {
+        let re = Regex::new(regex)?;
+        let is_match = re.is_match(username).unwrap_or(false);
+        if !is_match {
+            return Err(QueryError::InvalidUsernameError);
+        }
+    }
+    let allow_redirects = !matches!(info.error_type, ErrorType::ResponseUrl { .. });
+    let req_method = info.request_method.unwrap_or(match info.error_type {
+        // In most cases when we are detecting by status code,
+        // it is not necessary to get the entire body:  we can
+        // detect fine with just the HEAD response.
+        ErrorType::StatusCode { .. } => RequestMethod::Head,
+        // Either this detect method needs the content associated
+        // with the GET response, or this specific website will
+        // not respond properly unless we request the whole page.
+        _ => RequestMethod::Get,
+    });
+    make_request(
+        url_probe,
+        info.headers.clone(),
+        allow_redirects,
+        timeout,
+        req_method,
+        request_body,
+        proxy,
+        None,
+    )
+    .await
+    .map_err(|_| QueryError::RequestError)
 }

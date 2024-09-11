@@ -6,13 +6,14 @@ use crate::{
     waf::waf_hit,
 };
 use color_eyre::eyre;
+use std::time::Duration;
 use std::{collections::HashMap, sync::Arc};
 use tokio::sync::mpsc::channel;
 
 #[derive(Debug, Clone)]
 pub struct CheckOptions {
-    pub timeout: u64,
-    pub proxy: Arc<Option<String>>,
+    pub timeout: Duration,
+    pub proxy: Option<Arc<str>>,
     pub print_all: bool,
     pub print_found: bool,
     pub dump_response: bool,
@@ -33,7 +34,7 @@ pub async fn check_username(
         browse,
     } = options;
 
-    let num_of_sites = site_data.keys().len();
+    let num_of_sites = site_data.len();
     if num_of_sites == 0 {
         return Err(eyre::eyre!("No sites to check"));
     }
@@ -41,73 +42,69 @@ pub async fn check_username(
     let (tx, mut rx) = channel::<RequestResult>(num_of_sites);
 
     // ping sites for username matches
-    let username = Arc::new(username.to_string());
+    let username = Arc::from(username);
     for (site, info) in site_data.iter() {
         add_result_to_channel(
             tx.clone(),
             Arc::clone(&username),
-            Arc::new(site.to_string()),
-            Arc::clone(&info),
+            Arc::from(&site[..]),
+            Arc::clone(info),
             *timeout,
-            Arc::clone(proxy),
+            proxy.clone(),
         )?;
     }
 
     drop(tx);
 
     // save to output data struct
-    let mut results = vec![];
+    let mut results = Vec::with_capacity(site_data.len());
     while let Some(result) = rx.recv().await {
-        let site = result.site;
-        let info = result.info;
-        let url = result.url;
-        let url_probe = result.url_probe;
-        let username = result.username;
+        let RequestResult {
+            username,
+            site,
+            info,
+            url,
+            url_probe,
+            ..
+        } = result;
 
         let query_result: QueryResult = match result.response {
-            Err(e) => match e {
-                QueryError::InvalidUsernameError => QueryResult {
+            Err(e) => {
+                let status = match e {
+                    QueryError::InvalidUsernameError => QueryStatus::Illegal,
+                    QueryError::RequestError | QueryError::RegexError(_) => QueryStatus::Unknown,
+                };
+                QueryResult {
                     username: Arc::clone(&username),
                     site_name: Arc::clone(&site),
                     info: Arc::clone(&info),
                     site_url_user: url,
-                    status: QueryStatus::Illegal,
+                    status,
                     http_status: None,
                     query_time: result.query_time,
                     context: Some(e.to_string()),
-                },
-                QueryError::RequestError => QueryResult {
-                    username: Arc::clone(&username),
-                    site_name: Arc::clone(&site),
-                    info: Arc::clone(&info),
-                    site_url_user: url,
-                    status: QueryStatus::Unknown,
-                    http_status: None,
-                    query_time: result.query_time,
-                    context: Some(e.to_string()),
-                },
-            },
+                }
+            }
             Ok(response) => {
                 let status_code = response.status().as_u16();
                 let resp_text = response.text().await?;
                 let wfthit = waf_hit(&resp_text);
 
                 let error_type = &info.error_type;
-                let error_code = &info.error_code;
-                let status = match (wfthit, &error_type) {
+                let status = match (wfthit, error_type) {
                     (true, _) => QueryStatus::Waf,
-                    (false, ErrorType::Message) => {
-                        let error_flag = info.error_msg.iter().any(|msg| msg.is_in(&resp_text));
+                    (false, ErrorType::Message { msg }) => {
+                        let error_flag = msg.is_in(&resp_text);
                         if error_flag {
                             QueryStatus::Available
                         } else {
                             QueryStatus::Claimed
                         }
                     }
-                    (false, ErrorType::StatusCode) => {
+                    (false, ErrorType::StatusCode { codes }) => {
                         let mut status = QueryStatus::Claimed;
 
-                        if let Some(error_codes) = &error_code {
+                        if let Some(error_codes) = codes {
                             if error_codes.contains(&status_code) {
                                 status = QueryStatus::Available;
                             }
@@ -117,7 +114,7 @@ pub async fn check_username(
 
                         status
                     }
-                    (false, ErrorType::ResponseUrl) => {
+                    (false, ErrorType::ResponseUrl { .. }) => {
                         if (200..300).contains(&status_code) {
                             QueryStatus::Claimed
                         } else {
@@ -130,26 +127,21 @@ pub async fn check_username(
                     println!("+++++++++++++++++++++");
                     println!("TARGET NAME   : {site}");
                     println!("USERNAME      : {username}");
-                    println!("TARGET URL    : {:?}", url_probe);
-                    println!("TEST METHOD   : {:?}", error_type);
-                    if let Some(error_codes) = &error_code {
-                        println!("ERROR CODES   : {:?}", error_codes);
-                    }
+                    println!("TARGET URL    : {url_probe:?}");
+                    // TODO: Split this out into parts? Impl debug differently?
+                    println!("TEST METHOD   : {error_type:?}");
                     println!("Results...");
-                    println!("RESPONSE CODE : {}", status_code);
-                    if let Some(error_msg) = &info.error_msg {
-                        println!("ERROR TEXT    : {:?}", error_msg);
-                    }
+                    println!("RESPONSE CODE : {status_code}");
                     println!(">>>>> BEGIN RESPONSE TEXT");
-                    println!("{}", resp_text);
+                    println!("{resp_text}");
                     println!("<<<<< END RESPONSE TEXT");
 
-                    println!("VERDICT       : {:?}", status);
+                    println!("VERDICT       : {status:?}");
                     println!("+++++++++++++++++++++");
                 }
 
                 if *browse && status == QueryStatus::Claimed {
-                    open::that(&url).inspect_err(|e| eprintln!("Failed to open browser: {}", e))?;
+                    open::that(&url).inspect_err(|e| eprintln!("Failed to open browser: {e}"))?;
                 }
 
                 QueryResult {

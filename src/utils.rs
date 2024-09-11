@@ -33,6 +33,7 @@ use std::collections::HashMap;
 ///   "test.user",
 /// ]);
 /// ```
+#[must_use]
 pub fn create_username_variants(usernames: &[String]) -> Vec<String> {
     let variant_symbol = "{?}";
     let check_symbols = ["_", "-", "."];
