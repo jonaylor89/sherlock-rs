@@ -1,0 +1,28 @@
+name: Release Binaries
+
+on:
+  push:
+    tags:
+      - v[0-9]+.*
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Upload binaries to release
+        uses: taiki-e/upload-rust-binary-action@v1
+        with:
+          bin: sherlock
+          token: ${{ secrets.GITHUB_TOKEN }}
+          # Automatically builds for multiple platforms:
+          # - x86_64-unknown-linux-gnu
+          # - x86_64-unknown-linux-musl
+          # - aarch64-unknown-linux-gnu
+          # - x86_64-apple-darwin
+          # - aarch64-apple-darwin
+          # - x86_64-pc-windows-msvc
