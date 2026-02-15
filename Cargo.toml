@@ -1,34 +1,6 @@
-[package]
-name = "sherlock"
-description = "🔍 Hunt down social media accounts by username across social networks"
-authors = ["Johannes Naylor <jonaylor89@gmail.com>"]
-license = "MIT"
-version = "3.0.2"
-edition = "2021"
-readme = "README.md"
-repository = "https://github.com/jonaylor89/sherlock-rs"
-keywords = ["osint", "reconnaissance", "information", "gathering"]
-homepage = "https://sherlockproject.xyz/"
-
-
-[dependencies]
-tokio = { version = "1.39.2", features = ["macros", "rt-multi-thread"] }
-color-eyre = "0.6.3"
-reqwest = { version = "0.12.5", features = ["json"] }
-serde = { version = "1.0.208", features = ["derive"] }
-tokio-macros = "2.4.0"
-futures = "0.3.30"
-regex = "1.10.6"
-tokio-stream = "0.1.15"
-thiserror = "1.0.63"
-serde_json = "1.0.125"
-serde_path_to_error = "0.1.16"
-fancy-regex = "0.13.0"
-clap = { version = "4.5.16", features = ["derive"] }
-colored = "2.1.0"
-rust_xlsxwriter = { version = "0.73.0", optional = true }
-open = "5.3.0"
-rand = "0.8.5"
-
-[features]
-xlsx = ["dep:rust_xlsxwriter"]
+[workspace]
+resolver = "2"
+members = [
+    "crates/sherlock",
+    "crates/health-agent",
+]

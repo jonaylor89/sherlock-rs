@@ -34,16 +34,29 @@ pub struct RequestResult {
     pub query_time: Duration,
 }
 
-pub async fn make_request(
-    url: &str,
-    headers: Option<HashMap<String, String>>,
-    allow_redirects: bool,
-    timeout: Duration,
-    method: RequestMethod,
-    request_payload: Option<String>,
-    proxy: Option<&str>,
-    user_agent: Option<String>,
-) -> color_eyre::Result<Response> {
+pub struct RequestParams {
+    pub url: String,
+    pub headers: Option<HashMap<String, String>>,
+    pub allow_redirects: bool,
+    pub timeout: Duration,
+    pub method: RequestMethod,
+    pub request_payload: Option<String>,
+    pub proxy: Option<String>,
+    pub user_agent: Option<String>,
+}
+
+pub async fn make_request(params: RequestParams) -> color_eyre::Result<Response> {
+    let RequestParams {
+        url,
+        headers,
+        allow_redirects,
+        timeout,
+        method,
+        request_payload,
+        proxy,
+        user_agent,
+    } = params;
+
     let redirect_policy = match allow_redirects {
         true => Policy::limited(5),
         false => Policy::none(),
@@ -86,7 +99,7 @@ pub async fn make_request(
     let client = builder.build()?;
 
     let resp = client
-        .request(req_method, url)
+        .request(req_method, &url)
         .json(&request_payload)
         .send()
         .await?;

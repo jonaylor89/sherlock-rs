@@ -47,5 +47,5 @@ pub async fn get_json_data(json_file: String) -> color_eyre::Result<String> {
 /// includes >400 websites and their error messages
 #[must_use]
 pub fn get_default_data() -> String {
-    include_str!("data.json").to_string()
+    include_str!("resources/data.json").to_string()
 }

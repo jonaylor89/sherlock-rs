@@ -32,11 +32,7 @@ pub struct SaveOptions {
 ///
 /// # Returns
 /// A Result containing the success or failure of the operation.
-pub fn save_results(
-    username: &str,
-    results: &[QueryResult],
-    options: &SaveOptions,
-) -> Result<()> {
+pub fn save_results(username: &str, results: &[QueryResult], options: &SaveOptions) -> Result<()> {
     let total_hits = results
         .iter()
         .filter(|result| result.status == QueryStatus::Claimed)
@@ -67,7 +63,7 @@ pub fn save_results(
     if options.csv {
         write_csv(
             username,
-            &results,
+            results,
             options.output_folder.as_deref(),
             options.print_all,
             options.print_found,

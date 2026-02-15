@@ -6,7 +6,7 @@ use std::{fmt, time::Instant};
 use thiserror::Error;
 use tokio::sync::mpsc::Sender;
 
-use crate::requests::{make_request, RequestResult};
+use crate::requests::{make_request, RequestParams, RequestResult};
 use crate::sherlock_target_manifest::{ErrorType, RequestMethod, TargetInfo};
 use crate::utils::Interpolatable;
 
@@ -20,7 +20,7 @@ pub enum QueryError {
     RegexError(#[from] fancy_regex::Error),
 }
 
-#[derive(Debug, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
 pub enum QueryStatus {
     /// username detected
     Claimed,
@@ -126,16 +126,16 @@ async fn check_user_at_site(
         // not respond properly unless we request the whole page.
         _ => RequestMethod::Get,
     });
-    make_request(
-        url_probe,
-        info.headers.clone(),
+    make_request(RequestParams {
+        url: url_probe.to_owned(),
+        headers: info.headers.clone(),
         allow_redirects,
         timeout,
-        req_method,
-        request_body,
-        proxy,
-        None,
-    )
+        method: req_method,
+        request_payload: request_body,
+        proxy: proxy.map(|p| p.to_owned()),
+        user_agent: None,
+    })
     .await
     .map_err(|_| QueryError::RequestError)
 }
