@@ -10,11 +10,15 @@
 </p>
 
 <p align="center">
-  <a href="https://sherlockproject.xyz/installation">Installation</a>
+  <a href="docs/README.zh.md">简体中文</a>
   &nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;
-  <a href="https://sherlockproject.xyz/usage">Usage</a>
+  <a href="docs/README.de.md">Deutsch</a>
   &nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;
-  <a href="https://sherlockproject.xyz/contribute">Contributing</a>
+  <a href="docs/README.es.md">Español</a>
+  &nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;
+  <a href="docs/README.ru.md">Русский</a>
+  &nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;
+  <a href="docs/README.tr.md">Türkçe</a>
 </p>
 
 <p align="center">
@@ -22,6 +26,13 @@
 </a>
 </p>
 
+
+## Installation
+
+```shell
+# Install rustup from https://rustup.rs/
+cargo install sherlock
+```
 
 ## Usage
 
