@@ -72,7 +72,13 @@ pub fn save_results(username: &str, results: &[QueryResult], options: &SaveOptio
 
     if options.xlsx {
         #[cfg(feature = "xlsx")]
-        write_xlsx(username, results, options.output_folder.as_deref(), options.print_all, options.print_found)?;
+        write_xlsx(
+            username,
+            results,
+            options.output_folder.as_deref(),
+            options.print_all,
+            options.print_found,
+        )?;
 
         #[cfg(not(feature = "xlsx"))]
         eprintln!("Error: xlsx support is not enabled");
