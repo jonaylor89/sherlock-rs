@@ -72,7 +72,7 @@ pub fn save_results(username: &str, results: &[QueryResult], options: &SaveOptio
 
     if options.xlsx {
         #[cfg(feature = "xlsx")]
-        write_xlsx(&username, &results, output_folder, print_all, print_found)?;
+        write_xlsx(username, results, options.output_folder.as_deref(), options.print_all, options.print_found)?;
 
         #[cfg(not(feature = "xlsx"))]
         eprintln!("Error: xlsx support is not enabled");
@@ -94,7 +94,7 @@ pub fn save_results(username: &str, results: &[QueryResult], options: &SaveOptio
 #[cfg(feature = "xlsx")]
 pub fn write_xlsx(
     username: &str,
-    results: &Vec<QueryResult>,
+    results: &[QueryResult],
     output_folder: Option<&str>,
     print_all: bool,
     print_found: bool,
@@ -120,10 +120,10 @@ pub fn write_xlsx(
         let response_time_s = result.query_time.as_secs();
 
         worksheet.write_string(row, 0, username)?;
-        worksheet.write_string(row, 1, &result.site_name)?;
-        worksheet.write_string(row, 2, &result.url_main)?;
+        worksheet.write_string(row, 1, &*result.site_name)?;
+        worksheet.write_string(row, 2, &result.info.url_main)?;
         worksheet.write_string(row, 3, &result.site_url_user)?;
-        worksheet.write_string(row, 4, &format!("{:?}", result.status))?;
+        worksheet.write_string(row, 4, format!("{:?}", result.status))?;
         worksheet.write_number(row, 5, result.http_status.unwrap_or(0) as f64)?;
         worksheet.write_number(row, 6, response_time_s as f64)?;
 
