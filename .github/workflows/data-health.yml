@@ -1,0 +1,57 @@
+name: Data Health Check
+
+on:
+  schedule:
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  health-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Install Rust stable
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('Cargo.lock') }}
+
+      - name: Update data.json from upstream
+        run: bash scripts/update_data.sh
+
+      - name: Build health-agent
+        run: cargo build --release -p sherlock-health-agent
+
+      - name: Run health check
+        continue-on-error: true
+        run: ./target/release/sherlock-health-agent check --sample 50 --timeout 30 --output health_report.json --local
+
+      - name: Apply fixes
+        continue-on-error: true
+        run: ./target/release/sherlock-health-agent fix --report health_report.json --data crates/sherlock/src/resources/data.json
+
+      - name: Create PR with fixes
+        uses: peter-evans/create-pull-request@v6
+        with:
+          commit-message: "chore: update data.json based on health check"
+          title: "chore: automated data.json health update"
+          body: |
+            The health agent ran automated checks against a sample of sites and
+            applied fixes to `data.json` where issues were detected.
+
+            Please review the changes before merging.
+          branch: automated/data-health-update
+          labels: automated,data-health
+          delete-branch: true
