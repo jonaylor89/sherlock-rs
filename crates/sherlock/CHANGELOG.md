@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.0.0](https://github.com/jonaylor89/sherlock-rs/compare/v4.0.2...v5.0.0) - 2026-02-17
+
+### Fixed
+
+- *(sherlock)* cache compied regex and tcp client between requests
+
 ## [4.0.2](https://github.com/jonaylor89/sherlock-rs/compare/v4.0.1...v4.0.2) - 2026-02-16
 
 ### Other
