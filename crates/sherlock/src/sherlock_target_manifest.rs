@@ -2,6 +2,7 @@ use core::fmt;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use std::collections::HashMap;
+use std::sync::OnceLock;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct SherlockTargetManifest {
@@ -43,6 +44,9 @@ pub struct TargetInfo {
     pub error_type: ErrorType,
     // The json schema says there is a `response_url` field, but it is not present
     // in any of the targets in the official repository
+    /// Cached compiled regex for thread-safe lazy initialization
+    #[serde(skip)]
+    pub compiled_regex: OnceLock<Option<fancy_regex::Regex>>,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]

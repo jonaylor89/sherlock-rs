@@ -12,6 +12,7 @@ fn default_options() -> CheckOptions {
     CheckOptions {
         timeout: Duration::from_secs(10),
         proxy: None,
+        client: Arc::new(reqwest::Client::new()),
         print_all: false,
         print_found: false,
         dump_response: false,
@@ -33,6 +34,7 @@ fn make_target(mock_uri: &str, error_type: ErrorType) -> TargetInfo {
         tags: None,
         request_method: None,
         error_type,
+        compiled_regex: std::sync::OnceLock::new(),
     }
 }
 

@@ -14,6 +14,7 @@ use tokio::sync::mpsc::channel;
 pub struct CheckOptions {
     pub timeout: Duration,
     pub proxy: Option<Arc<str>>,
+    pub client: Arc<reqwest::Client>,
     pub print_all: bool,
     pub print_found: bool,
     pub dump_response: bool,
@@ -27,11 +28,12 @@ pub async fn check_username(
 ) -> color_eyre::Result<Vec<QueryResult>> {
     let CheckOptions {
         timeout,
-        proxy,
+        client,
         print_all,
         print_found,
         dump_response,
         browse,
+        ..
     } = options;
 
     let num_of_sites = site_data.len();
@@ -50,7 +52,7 @@ pub async fn check_username(
             Arc::from(&site[..]),
             Arc::clone(info),
             *timeout,
-            proxy.clone(),
+            Arc::clone(client),
         )?;
     }
 
@@ -87,8 +89,22 @@ pub async fn check_username(
             }
             Ok(response) => {
                 let status_code = response.status().as_u16();
-                let resp_text = response.text().await?;
-                let wfthit = waf_hit(&resp_text);
+
+                // Only read body if we need to check content
+                let needs_body =
+                    matches!(info.error_type, ErrorType::Message { .. }) || *dump_response;
+
+                let resp_text = if needs_body {
+                    response.text().await?
+                } else {
+                    String::new()
+                };
+
+                let wfthit = if needs_body {
+                    waf_hit(&resp_text)
+                } else {
+                    false
+                };
 
                 let error_type = &info.error_type;
                 let status = match (wfthit, error_type) {

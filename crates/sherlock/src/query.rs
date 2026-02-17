@@ -61,7 +61,7 @@ pub fn add_result_to_channel(
     site: Arc<str>,
     info: Arc<TargetInfo>,
     timeout: Duration,
-    proxy: Option<Arc<str>>,
+    client: Arc<reqwest::Client>,
 ) -> color_eyre::Result<()> {
     tokio::spawn(async move {
         let encoded_username = &username.replace(' ', "%20");
@@ -74,8 +74,7 @@ pub fn add_result_to_channel(
         };
 
         let start = Instant::now();
-        let response =
-            check_user_at_site(&username, &url_probe, &info, timeout, proxy.as_deref()).await;
+        let response = check_user_at_site(&username, &url_probe, &info, timeout, &client).await;
         let duration = start.elapsed();
 
         let request_result = RequestResult {
@@ -100,7 +99,7 @@ async fn check_user_at_site(
     url_probe: &str,
     info: &TargetInfo,
     timeout: Duration,
-    proxy: Option<&str>,
+    client: &reqwest::Client,
 ) -> Result<Response, QueryError> {
     let request_body = info
         .request_payload
@@ -108,14 +107,21 @@ async fn check_user_at_site(
         .map(|payload| payload.to_string().interpolate(username));
 
     // use regex to make sure the url and username are valid for the site
-    if let Some(regex) = &info.regex_check {
-        let re = Regex::new(regex)?;
-        let is_match = re.is_match(username).unwrap_or(false);
-        if !is_match {
+    if let Some(regex_pattern) = &info.regex_check {
+        let re = info
+            .compiled_regex
+            .get_or_init(|| Regex::new(regex_pattern).ok());
+
+        if let Some(regex) = re {
+            let is_match = regex.is_match(username).unwrap_or(false);
+            if !is_match {
+                return Err(QueryError::InvalidUsernameError);
+            }
+        } else {
+            // Regex compilation failed - treat as invalid username
             return Err(QueryError::InvalidUsernameError);
         }
     }
-    let allow_redirects = !matches!(info.error_type, ErrorType::ResponseUrl { .. });
     let req_method = info.request_method.unwrap_or(match info.error_type {
         // In most cases when we are detecting by status code,
         // it is not necessary to get the entire body:  we can
@@ -126,16 +132,17 @@ async fn check_user_at_site(
         // not respond properly unless we request the whole page.
         _ => RequestMethod::Get,
     });
-    make_request(RequestParams {
-        url: url_probe.to_owned(),
-        headers: info.headers.clone(),
-        allow_redirects,
-        timeout,
-        method: req_method,
-        request_payload: request_body,
-        proxy: proxy.map(|p| p.to_owned()),
-        user_agent: None,
-    })
+    make_request(
+        client,
+        RequestParams {
+            url: url_probe.to_owned(),
+            headers: info.headers.clone(),
+            timeout,
+            method: req_method,
+            request_payload: request_body,
+            user_agent: None,
+        },
+    )
     .await
     .map_err(|_| QueryError::RequestError)
 }

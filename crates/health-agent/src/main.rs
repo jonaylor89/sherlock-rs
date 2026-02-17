@@ -172,9 +172,17 @@ async fn run_check(
         batch_delay_ms,
     );
 
+    // Create a shared HTTP client for all requests
+    let client = Arc::new(
+        reqwest::Client::builder()
+            .redirect(reqwest::redirect::Policy::limited(5))
+            .build()?,
+    );
+
     let check_options = CheckOptions {
         timeout: Duration::from_secs_f64(timeout),
         proxy: None,
+        client,
         print_all: false,
         print_found: false,
         dump_response: false,

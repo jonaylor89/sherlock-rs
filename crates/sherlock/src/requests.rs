@@ -3,8 +3,7 @@ use std::{collections::HashMap, sync::Arc, time::Duration};
 
 use reqwest::{
     header::{HeaderMap, HeaderName, HeaderValue},
-    redirect::Policy,
-    Client, Proxy, Response,
+    Client, Response,
 };
 
 use crate::{
@@ -37,30 +36,21 @@ pub struct RequestResult {
 pub struct RequestParams {
     pub url: String,
     pub headers: Option<HashMap<String, String>>,
-    pub allow_redirects: bool,
     pub timeout: Duration,
     pub method: RequestMethod,
     pub request_payload: Option<String>,
-    pub proxy: Option<String>,
     pub user_agent: Option<String>,
 }
 
-pub async fn make_request(params: RequestParams) -> color_eyre::Result<Response> {
+pub async fn make_request(client: &Client, params: RequestParams) -> color_eyre::Result<Response> {
     let RequestParams {
         url,
         headers,
-        allow_redirects,
         timeout,
         method,
         request_payload,
-        proxy,
         user_agent,
     } = params;
-
-    let redirect_policy = match allow_redirects {
-        true => Policy::limited(5),
-        false => Policy::none(),
-    };
 
     let headers_map = headers
         .unwrap_or_default()
@@ -86,20 +76,12 @@ pub async fn make_request(params: RequestParams) -> color_eyre::Result<Response>
 
     let req_user_agent = user_agent.unwrap_or(random_agent.into());
 
-    let mut builder = Client::builder()
-        .default_headers(headers_map)
-        .user_agent(req_user_agent)
-        .timeout(timeout)
-        .redirect(redirect_policy);
-
-    if let Some(proxy) = proxy {
-        builder = builder.proxy(Proxy::all(proxy)?);
-    }
-
-    let client = builder.build()?;
-
+    // Use the shared client and configure per-request settings
     let resp = client
         .request(req_method, &url)
+        .headers(headers_map)
+        .header("User-Agent", req_user_agent)
+        .timeout(timeout)
         .json(&request_payload)
         .send()
         .await?;

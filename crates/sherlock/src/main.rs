@@ -130,9 +130,20 @@ async fn main() -> Result<()> {
 
     let username_variants = create_username_variants(&cli.usernames);
 
+    // Create a shared HTTP client for all requests
+    let mut client_builder =
+        reqwest::Client::builder().redirect(reqwest::redirect::Policy::limited(5));
+
+    if let Some(proxy_url) = &cli.proxy {
+        client_builder = client_builder.proxy(reqwest::Proxy::all(proxy_url)?);
+    }
+
+    let client = Arc::new(client_builder.build()?);
+
     let check_options = CheckOptions {
         timeout: Duration::from_secs_f64(cli.timeout),
         proxy: cli.proxy.map(Arc::from),
+        client,
         print_all: cli.print_all,
         print_found: cli.print_found,
         dump_response: cli.dump_response,
