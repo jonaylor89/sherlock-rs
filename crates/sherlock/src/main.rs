@@ -11,10 +11,9 @@ use std::time::Duration;
 use std::{collections::HashMap, sync::Arc};
 
 #[derive(Parser)]
-#[command(version, about, long_about = None)]
 #[command(name = "sherlock")]
-#[command(author = "Johannes Naylor <jonaylor89@gmail.com>")]
-#[command(version = "0.1.0")]
+#[command(version, about, long_about = None)]
+#[command(author = "Johannes Naylor <me@jonaylor.com>")]
 #[command(about = "Hunt down social media accounts by username", long_about = None)]
 struct Cli {
     /// One or more usernames to check with social networks. Check similar usernames using {?} (replace to '_', '-', '.').
