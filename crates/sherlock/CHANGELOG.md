@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.0.4](https://github.com/jonaylor89/sherlock-rs/compare/v5.0.3...v5.0.4) - 2026-02-19
+
+### Other
+
+- upgrade dependencies
+
 ## [5.0.3](https://github.com/jonaylor89/sherlock-rs/compare/v5.0.2...v5.0.3) - 2026-02-19
 
 ### Other
