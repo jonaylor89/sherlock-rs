@@ -1578,7 +1578,7 @@ dependencies = [
 
 [[package]]
 name = "sherlock"
-version = "5.0.4"
+version = "5.0.5"
 dependencies = [
  "clap",
  "color-eyre",
