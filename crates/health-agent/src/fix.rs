@@ -157,31 +157,31 @@ fn try_fix_regex(data: &Map<String, Value>, site: &str) -> Option<RegexFix> {
 
     // Case 2: Min length in `{min,max}` is too large for the claimed username
     // e.g., `^[a-z0-9]{4,40}$` but claimed username is "bob" (3 chars)
-    if let Some(brace_start) = regex.rfind('{') {
-        if let Some(brace_end) = regex[brace_start..].find('}') {
-            let quantifier = &regex[brace_start + 1..brace_start + brace_end];
-            if let Some((min_str, max_str)) = quantifier.split_once(',') {
-                if let Ok(min) = min_str.trim().parse::<usize>() {
-                    let new_min = claimed.len().min(min);
-                    if new_min < min {
-                        let new_regex = format!(
-                            "{}{{{},{}}}{}",
-                            &regex[..brace_start],
-                            new_min,
-                            max_str.trim(),
-                            &regex[brace_start + brace_end + 1..]
-                        );
-                        if fancy_regex::Regex::new(&new_regex)
-                            .ok()?
-                            .is_match(claimed)
-                            .unwrap_or(false)
-                        {
-                            return Some(RegexFix {
-                                old: regex.to_string(),
-                                new: new_regex,
-                            });
-                        }
-                    }
+    if let Some(brace_start) = regex.rfind('{')
+        && let Some(brace_end) = regex[brace_start..].find('}')
+    {
+        let quantifier = &regex[brace_start + 1..brace_start + brace_end];
+        if let Some((min_str, max_str)) = quantifier.split_once(',')
+            && let Ok(min) = min_str.trim().parse::<usize>()
+        {
+            let new_min = claimed.len().min(min);
+            if new_min < min {
+                let new_regex = format!(
+                    "{}{{{},{}}}{}",
+                    &regex[..brace_start],
+                    new_min,
+                    max_str.trim(),
+                    &regex[brace_start + brace_end + 1..]
+                );
+                if fancy_regex::Regex::new(&new_regex)
+                    .ok()?
+                    .is_match(claimed)
+                    .unwrap_or(false)
+                {
+                    return Some(RegexFix {
+                        old: regex.to_string(),
+                        new: new_regex,
+                    });
                 }
             }
         }

@@ -1,10 +1,10 @@
 [package]
 name = "sherlock-health-agent"
 description = "Automated site health monitor for sherlock — detects broken sites, stale data, and new WAF patterns"
-authors = ["Johannes Naylor <jonaylor89@gmail.com>"]
+authors = ["Johannes Naylor <me@jonaylor.com>"]
 license = "MIT"
 version = "0.1.0"
-edition = "2021"
+edition = "2024"
 repository = "https://github.com/jonaylor89/sherlock-rs"
 publish = false
 

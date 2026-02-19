@@ -2,8 +2,8 @@ use rand::seq::SliceRandom;
 use std::{collections::HashMap, sync::Arc, time::Duration};
 
 use reqwest::{
-    header::{HeaderMap, HeaderName, HeaderValue},
     Client, Response,
+    header::{HeaderMap, HeaderName, HeaderValue},
 };
 
 use crate::{

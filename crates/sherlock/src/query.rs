@@ -6,7 +6,7 @@ use std::{fmt, time::Instant};
 use thiserror::Error;
 use tokio::sync::mpsc::Sender;
 
-use crate::requests::{make_request, RequestParams, RequestResult};
+use crate::requests::{RequestParams, RequestResult, make_request};
 use crate::sherlock_target_manifest::{ErrorType, RequestMethod, TargetInfo};
 use crate::utils::Interpolatable;
 

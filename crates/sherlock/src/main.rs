@@ -1,9 +1,9 @@
 use clap::Parser;
 use color_eyre::Result;
 use sherlock::{
-    checker::{check_username, CheckOptions},
+    checker::{CheckOptions, check_username},
     get_data::{get_default_data, get_json_data},
-    output::{save_results, SaveOptions},
+    output::{SaveOptions, save_results},
     sherlock_target_manifest::{SherlockTargetManifest, TargetInfo},
     utils::create_username_variants,
 };

@@ -2,7 +2,7 @@ use std::collections::HashMap;
 use std::sync::Arc;
 use std::time::Duration;
 
-use sherlock::checker::{check_username, CheckOptions};
+use sherlock::checker::{CheckOptions, check_username};
 use sherlock::query::QueryStatus;
 use sherlock::sherlock_target_manifest::{ErrorCode, ErrorMsg, ErrorType, TargetInfo};
 use wiremock::matchers::any;

@@ -1,6 +1,6 @@
 use crate::{
     output::print_result,
-    query::{add_result_to_channel, QueryError, QueryResult, QueryStatus},
+    query::{QueryError, QueryResult, QueryStatus, add_result_to_channel},
     requests::RequestResult,
     sherlock_target_manifest::{ErrorType, TargetInfo},
     waf::waf_hit,

@@ -8,7 +8,7 @@ use clap::{Parser, Subcommand};
 use color_eyre::Result;
 use rand::seq::SliceRandom;
 use sherlock::{
-    checker::{check_username, CheckOptions},
+    checker::{CheckOptions, check_username},
     get_data::{get_default_data, get_json_data},
     query::QueryStatus,
     sherlock_target_manifest::{SherlockTargetManifest, TargetInfo},

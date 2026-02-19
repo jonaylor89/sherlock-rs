@@ -37,7 +37,7 @@ use std::collections::HashMap;
 pub fn create_username_variants(usernames: &[String]) -> Vec<String> {
     let variant_symbol = "{?}";
     let check_symbols = ["_", "-", "."];
-    let variants = usernames
+    usernames
         .iter()
         .flat_map(|username| {
             if !username.contains(variant_symbol) {
@@ -49,9 +49,7 @@ pub fn create_username_variants(usernames: &[String]) -> Vec<String> {
                 .map(|symbol| username.replace(variant_symbol, symbol))
                 .collect::<Vec<String>>()
         })
-        .collect();
-
-    variants
+        .collect()
 }
 
 pub trait Interpolatable {
