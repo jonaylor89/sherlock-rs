@@ -2,7 +2,7 @@ name: Release Binaries
 
 on:
   release:
-    types: [published]
+    types: [created]
 
 permissions:
   contents: write
