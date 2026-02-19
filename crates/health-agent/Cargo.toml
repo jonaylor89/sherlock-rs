@@ -10,13 +10,13 @@ publish = false
 
 [dependencies]
 sherlock = { path = "../sherlock" }
-tokio = { version = "1.39.2", features = ["macros", "rt-multi-thread"] }
-color-eyre = "0.6.3"
-reqwest = { version = "0.12.5", features = ["json"] }
-serde = { version = "1.0.208", features = ["derive"] }
-serde_json = "1.0.125"
-clap = { version = "4.5.16", features = ["derive"] }
-serde_path_to_error = "0.1.16"
+tokio = { version = "1.49.0", features = ["macros", "rt-multi-thread"] }
+color-eyre = "0.6.5"
+reqwest = { version = "0.12.28", features = ["json"] }
+serde = { version = "1.0.228", features = ["derive"] }
+serde_json = "1.0.149"
+clap = { version = "4.5.59", features = ["derive"] }
+serde_path_to_error = "0.1.20"
 chrono = { version = "0.4", features = ["serde"] }
 fancy-regex = "0.13.0"
 rand = "0.8.5"

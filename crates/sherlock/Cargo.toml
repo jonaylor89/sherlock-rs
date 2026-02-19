@@ -12,27 +12,27 @@ homepage = "https://www.jonaylor.com/blog/make-an-exe-file"
 
 
 [dependencies]
-tokio = { version = "1.39.2", features = ["macros", "rt-multi-thread"] }
-color-eyre = "0.6.3"
-reqwest = { version = "0.12.5", features = ["json"] }
-serde = { version = "1.0.208", features = ["derive"] }
-tokio-macros = "2.4.0"
-futures = "0.3.30"
-regex = "1.10.6"
-tokio-stream = "0.1.15"
-thiserror = "1.0.63"
-serde_json = "1.0.125"
-serde_path_to_error = "0.1.16"
+tokio = { version = "1.49.0", features = ["macros", "rt-multi-thread"] }
+color-eyre = "0.6.5"
+reqwest = { version = "0.12.28", features = ["json"] }
+serde = { version = "1.0.228", features = ["derive"] }
+tokio-macros = "2.6.0"
+futures = "0.3.32"
+regex = "1.12.3"
+tokio-stream = "0.1.18"
+thiserror = "1.0.69"
+serde_json = "1.0.149"
+serde_path_to_error = "0.1.20"
 fancy-regex = "0.13.0"
-clap = { version = "4.5.16", features = ["derive"] }
-colored = "2.1.0"
+clap = { version = "4.5.59", features = ["derive"] }
+colored = "2.2.0"
 rust_xlsxwriter = { version = "0.73.0", optional = true }
-open = "5.3.0"
+open = "5.3.3"
 rand = "0.8.5"
 
 [dev-dependencies]
 wiremock = "0.6"
-tokio = { version = "1.39.2", features = ["macros", "rt-multi-thread"] }
+tokio = { version = "1.49.0", features = ["macros", "rt-multi-thread"] }
 
 [features]
 xlsx = ["dep:rust_xlsxwriter"]
