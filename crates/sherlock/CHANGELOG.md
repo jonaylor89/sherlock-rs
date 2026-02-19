@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.0.6](https://github.com/jonaylor89/sherlock-rs/compare/v5.0.5...v5.0.6) - 2026-02-19
+
+### Fixed
+
+- *(sherlock)* configure reqwest to use rustls
+
 ## [5.0.5](https://github.com/jonaylor89/sherlock-rs/compare/v5.0.4...v5.0.5) - 2026-02-19
 
 ### Fixed
