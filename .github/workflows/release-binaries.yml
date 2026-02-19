@@ -1,11 +1,11 @@
 name: Release Binaries
 
-on:
-  release:
-    types: [created]
-
 permissions:
   contents: write
+
+on:
+  push:
+    tags: ["v*"]  # or "v[0.9]+.*" for semver
 
 jobs:
   upload-assets:
