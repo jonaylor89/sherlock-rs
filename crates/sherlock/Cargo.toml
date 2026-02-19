@@ -14,7 +14,7 @@ homepage = "https://www.jonaylor.com/blog/make-an-exe-file"
 [dependencies]
 tokio = { version = "1.49.0", features = ["macros", "rt-multi-thread"] }
 color-eyre = "0.6.5"
-reqwest = { version = "0.12.28", features = ["json"] }
+reqwest = { version = "0.12.28", default-features = false, features = ["json", "rustls-tls"] }
 serde = { version = "1.0.228", features = ["derive"] }
 tokio-macros = "2.6.0"
 futures = "0.3.32"
