@@ -8,7 +8,7 @@ edition = "2024"
 readme = "../../README.md"
 repository = "https://github.com/jonaylor89/sherlock-rs"
 keywords = ["osint", "reconnaissance", "information", "gathering"]
-homepage = "https://sherlockproject.xyz/"
+homepage = "https://www.jonaylor.com/blog/make-an-exe-file"
 
 
 [dependencies]
