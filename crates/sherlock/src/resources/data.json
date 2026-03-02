@@ -77,6 +77,14 @@
     "urlMain": "https://www.airliners.net/",
     "username_claimed": "yushinlin"
   },
+  "All Things Worn": {
+    "errorMsg": "Sell Used Panties",
+    "errorType": "message",
+    "isNSFW": true,
+    "url": "https://www.allthingsworn.com/profile/{}",
+    "urlMain": "https://www.allthingsworn.com",
+    "username_claimed": "pink"
+  },
   "AllMyLinks": {
     "errorMsg": "Page not found",
     "errorType": "message",
@@ -443,7 +451,7 @@
   "Chess": {
     "errorMsg": "Username is valid",
     "errorType": "message",
-    "regexCheck": "^[a-z1-9]{3,25}$",
+    "regexCheck": "^[a-zA-Z0-9_]{3,25}$",
     "url": "https://www.chess.com/member/{}",
     "urlMain": "https://www.chess.com/",
     "urlProbe": "https://www.chess.com/callback/user/valid?username={}",
@@ -650,6 +658,13 @@
     "url": "https://cults3d.com/en/users/{}/creations",
     "urlMain": "https://cults3d.com/en",
     "username_claimed": "brown"
+  },
+  "CurseForge": {
+    "errorCode": 404,
+    "errorType": "status_code",
+    "url": "https://www.curseforge.com/members/{}/projects",
+    "urlMain": "https://www.curseforge.com.",
+    "username_claimed": "blue"
   },
   "CyberDefenders": {
     "errorType": "status_code",
@@ -1179,13 +1194,6 @@
     "urlMain": "https://hubpages.com/",
     "username_claimed": "blue"
   },
-  "Hubski": {
-    "errorMsg": "No such user",
-    "errorType": "message",
-    "url": "https://hubski.com/user/{}",
-    "urlMain": "https://hubski.com/",
-    "username_claimed": "blue"
-  },
   "HudsonRock": {
     "errorMsg": "This username is not associated",
     "errorType": "message",
@@ -1322,6 +1330,13 @@
     "urlMain": "https://discourse.joplinapp.org/",
     "username_claimed": "laurent"
   },
+  "Jupyter Community Forum": {
+    "errorMsg": "Oops! That page doesn\u2019t exist or is private.",
+    "errorType": "message",
+    "url": "https://discourse.jupyter.org/u/{}/summary",
+    "urlMain": "https://discourse.jupyter.org",
+    "username_claimed": "choldgraf"
+  },
   "Kaggle": {
     "errorType": "status_code",
     "url": "https://www.kaggle.com/{}",
@@ -1392,13 +1407,6 @@
     "errorType": "status_code",
     "url": "https://leetcode.com/{}",
     "urlMain": "https://leetcode.com/",
-    "username_claimed": "blue"
-  },
-  "LemmyWorld": {
-    "errorMsg": "<h1>Error!</h1>",
-    "errorType": "message",
-    "url": "https://lemmy.world/u/{}",
-    "urlMain": "https://lemmy.world",
     "username_claimed": "blue"
   },
   "LessWrong": {
@@ -1596,6 +1604,13 @@
     "urlMain": "https://www.native-instruments.com/forum/",
     "username_claimed": "jambert"
   },
+  "NationStates Nation": {
+    "errorMsg": "Was this your nation? It may have ceased to exist due to inactivity, but can rise again!",
+    "errorType": "message",
+    "url": "https://nationstates.net/nation={}",
+    "urlMain": "https://nationstates.net",
+    "username_claimed": "the_holy_principality_of_saint_mark"
+  },
   "NationStates Region": {
     "errorMsg": "does not exist.",
     "errorType": "message",
@@ -1608,6 +1623,12 @@
     "url": "https://blog.naver.com/{}",
     "urlMain": "https://naver.com",
     "username_claimed": "blue"
+  },
+  "Needrom": {
+    "errorType": "status_code",
+    "url": "https://www.needrom.com/author/{}/",
+    "urlMain": "https://www.needrom.com/",
+    "username_claimed": "needrom"
   },
   "Newgrounds": {
     "errorType": "status_code",
@@ -1846,14 +1867,6 @@
     "urlMain": "https://www.plurk.com/",
     "username_claimed": "plurkoffice"
   },
-  "PocketStars": {
-    "errorMsg": "Join Your Favorite Adult Stars",
-    "errorType": "message",
-    "isNSFW": true,
-    "url": "https://pocketstars.com/{}",
-    "urlMain": "https://pocketstars.com/",
-    "username_claimed": "hacker"
-  },
   "Pokemon Showdown": {
     "errorType": "status_code",
     "url": "https://pokemonshowdown.com/users/{}",
@@ -2042,13 +2055,6 @@
     "urlMain": "https://royalcams.com",
     "username_claimed": "asuna-black"
   },
-  "Ruby Forums": {
-    "errorMsg": "Oops! That page doesn\u2019t exist or is private.",
-    "errorType": "message",
-    "url": "https://ruby-forum.com/u/{}/summary",
-    "urlMain": "https://ruby-forums.com",
-    "username_claimed": "rishard"
-  },
   "RubyGems": {
     "errorType": "status_code",
     "regexCheck": "^[a-zA-Z][a-zA-Z0-9_-]{1,40}",
@@ -2153,13 +2159,6 @@
     "errorType": "message",
     "url": "https://slashdot.org/~{}",
     "urlMain": "https://slashdot.org",
-    "username_claimed": "blue"
-  },
-  "SlideShare": {
-    "errorMsg": "<title>Page no longer exists</title>",
-    "errorType": "message",
-    "url": "https://slideshare.net/{}",
-    "urlMain": "https://slideshare.net/",
     "username_claimed": "blue"
   },
   "Slides": {
@@ -2656,13 +2655,6 @@
     "urlMain": "https://windy.com/",
     "username_claimed": "blue"
   },
-  "Wix": {
-    "errorType": "status_code",
-    "regexCheck": "^[\\w@-]+?$",
-    "url": "https://{}.wix.com",
-    "urlMain": "https://wix.com/",
-    "username_claimed": "support"
-  },
   "WolframalphaForum": {
     "errorType": "status_code",
     "url": "https://community.wolfram.com/web/{}/home",
@@ -2690,6 +2682,13 @@
     "regexCheck": "^[a-zA-Z0-9_.+-]{1,40}$",
     "url": "https://www.wordnik.com/users/{}",
     "urlMain": "https://www.wordnik.com/",
+    "username_claimed": "blue"
+  },
+  "Wowhead": {
+    "errorCode": 404,
+    "errorType": "status_code",
+    "url": "https://wowhead.com/user={}",
+    "urlMain": "https://wowhead.com/",
     "username_claimed": "blue"
   },
   "Wykop": {
@@ -3071,6 +3070,14 @@
     "urlMain": "https://www.npmjs.com/",
     "username_claimed": "kennethsweezy"
   },
+  "omg.lol": {
+    "errorMsg": "\"available\": true",
+    "errorType": "message",
+    "url": "https://{}.omg.lol",
+    "urlMain": "https://home.omg.lol",
+    "urlProbe": "https://api.omg.lol/address/{}/availability",
+    "username_claimed": "adam"
+  },
   "opennet": {
     "errorMsg": "\u0418\u043c\u044f \u0443\u0447\u0430\u0441\u0442\u043d\u0438\u043a\u0430 \u043d\u0435 \u043d\u0430\u0439\u0434\u0435\u043d\u043e",
     "errorType": "message",
@@ -3084,13 +3091,6 @@
     "url": "https://osu.ppy.sh/users/{}",
     "urlMain": "https://osu.ppy.sh/",
     "username_claimed": "blue"
-  },
-  "phpRU": {
-    "errorMsg": "\u0423\u043a\u0430\u0437\u0430\u043d\u043d\u044b\u0439 \u043f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044c \u043d\u0435 \u043d\u0430\u0439\u0434\u0435\u043d. \u041f\u043e\u0436\u0430\u043b\u0443\u0439\u0441\u0442\u0430, \u0432\u0432\u0435\u0434\u0438\u0442\u0435 \u0434\u0440\u0443\u0433\u043e\u0435 \u0438\u043c\u044f.",
-    "errorType": "message",
-    "url": "https://php.ru/forum/members/?username={}",
-    "urlMain": "https://php.ru/forum/",
-    "username_claimed": "apple"
   },
   "pikabu": {
     "errorType": "status_code",
@@ -3164,6 +3164,12 @@
     "url": "https://www.threads.net/@{}",
     "urlMain": "https://www.threads.net/",
     "username_claimed": "zuck"
+  },
+  "tistory": {
+    "errorType": "status_code",
+    "url": "https://{}.tistory.com/",
+    "urlMain": "https://www.tistory.com/",
+    "username_claimed": "notice"
   },
   "toster": {
     "errorType": "status_code",
