@@ -1703,7 +1703,7 @@ dependencies = [
 
 [[package]]
 name = "sherlock"
-version = "5.0.7"
+version = "5.0.8"
 dependencies = [
  "clap",
  "color-eyre",
