@@ -127,7 +127,7 @@ pub fn write_xlsx(
 
         worksheet.write_string(row, 0, username)?;
         worksheet.write_string(row, 1, &*result.site_name)?;
-        worksheet.write_string(row, 2, &result.info.url_main)?;
+        worksheet.write_string(row, 2, &result.url_main)?;
         worksheet.write_string(row, 3, &result.site_url_user)?;
         worksheet.write_string(row, 4, format!("{:?}", result.status))?;
         worksheet.write_number(row, 5, result.http_status.unwrap_or(0) as f64)?;
@@ -189,7 +189,7 @@ pub fn write_csv(
             "{},{},{},{},{:?},{},{}",
             username,
             result.site_name,
-            result.info.url_main,
+            result.url_main,
             result.site_url_user,
             result.status,
             result.http_status.as_ref().unwrap_or(&0),
@@ -252,7 +252,7 @@ pub fn print_result(result: &QueryResult) {
                 "]".white(),
                 response_time_text.white(),
                 result.site_name.green(),
-                "Illegal Username Foramt For This Site!".yellow(),
+                "Illegal Username Format For This Site!".yellow(),
             );
         }
         QueryStatus::Waf => {

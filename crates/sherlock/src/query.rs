@@ -39,6 +39,7 @@ pub struct QueryResult {
     pub username: Arc<str>,
     pub site_name: Arc<str>,
     pub info: Arc<TargetInfo>,
+    pub url_main: String,
     pub site_url_user: String,
     pub status: QueryStatus,
     pub http_status: Option<u16>,
