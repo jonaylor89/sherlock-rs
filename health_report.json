@@ -1,16 +1,156 @@
 {
-  "timestamp": "2026-03-02T06:15:29.380101223Z",
+  "timestamp": "2026-09-07T10:54:54.999144928Z",
   "total_sites": 50,
-  "healthy": 19,
+  "healthy": 13,
   "results": [
     {
-      "site": "Empretienda AR",
+      "site": "Trovo",
       "claimed_check": {
-        "username": "camalote",
+        "username": "Aimilios",
+        "expected": "Claimed",
+        "actual": "Claimed",
+        "http_status": 403,
+        "query_time_ms": 60,
+        "context": null
+      },
+      "unclaimed_check": {
+        "username": "xq7z_k9m2_sherlock_health_test_unclaimed_99",
+        "expected": "Available",
+        "actual": "Claimed",
+        "http_status": 403,
+        "query_time_ms": 52,
+        "context": null
+      },
+      "verdict": "FalsePositive"
+    },
+    {
+      "site": "TnAFlix",
+      "claimed_check": {
+        "username": "hacker",
         "expected": "Claimed",
         "actual": "Claimed",
         "http_status": 200,
-        "query_time_ms": 413,
+        "query_time_ms": 625,
+        "context": null
+      },
+      "unclaimed_check": {
+        "username": "xq7z_k9m2_sherlock_health_test_unclaimed_99",
+        "expected": "Available",
+        "actual": "Available",
+        "http_status": 404,
+        "query_time_ms": 11,
+        "context": null
+      },
+      "verdict": "Healthy"
+    },
+    {
+      "site": "Kaggle",
+      "claimed_check": {
+        "username": "dansbecker",
+        "expected": "Claimed",
+        "actual": "Available",
+        "http_status": 400,
+        "query_time_ms": 214,
+        "context": null
+      },
+      "unclaimed_check": {
+        "username": "xq7z_k9m2_sherlock_health_test_unclaimed_99",
+        "expected": "Available",
+        "actual": "Available",
+        "http_status": 400,
+        "query_time_ms": 184,
+        "context": null
+      },
+      "verdict": "FalseNegative"
+    },
+    {
+      "site": "Slashdot",
+      "claimed_check": {
+        "username": "blue",
+        "expected": "Claimed",
+        "actual": "Claimed",
+        "http_status": 403,
+        "query_time_ms": 31,
+        "context": null
+      },
+      "unclaimed_check": {
+        "username": "xq7z_k9m2_sherlock_health_test_unclaimed_99",
+        "expected": "Available",
+        "actual": "Available",
+        "http_status": 404,
+        "query_time_ms": 370,
+        "context": null
+      },
+      "verdict": "Healthy"
+    },
+    {
+      "site": "Flightradar24",
+      "claimed_check": {
+        "username": "jebbrooks",
+        "expected": "Claimed",
+        "actual": "Available",
+        "http_status": 403,
+        "query_time_ms": 35,
+        "context": null
+      },
+      "unclaimed_check": {
+        "username": "xq7z_k9m2_sherlock_health_test_unclaimed_99",
+        "expected": "Available",
+        "actual": "Illegal",
+        "http_status": null,
+        "query_time_ms": 0,
+        "context": "Invalid username"
+      },
+      "verdict": "FalseNegative"
+    },
+    {
+      "site": "Packagist",
+      "claimed_check": {
+        "username": "psr",
+        "expected": "Claimed",
+        "actual": "Claimed",
+        "http_status": 200,
+        "query_time_ms": 223,
+        "context": null
+      },
+      "unclaimed_check": {
+        "username": "xq7z_k9m2_sherlock_health_test_unclaimed_99",
+        "expected": "Available",
+        "actual": "Claimed",
+        "http_status": 200,
+        "query_time_ms": 377,
+        "context": null
+      },
+      "verdict": "FalsePositive"
+    },
+    {
+      "site": "Coroflot",
+      "claimed_check": {
+        "username": "blue",
+        "expected": "Claimed",
+        "actual": "Claimed",
+        "http_status": 200,
+        "query_time_ms": 329,
+        "context": null
+      },
+      "unclaimed_check": {
+        "username": "xq7z_k9m2_sherlock_health_test_unclaimed_99",
+        "expected": "Available",
+        "actual": "Available",
+        "http_status": 404,
+        "query_time_ms": 174,
+        "context": null
+      },
+      "verdict": "Healthy"
+    },
+    {
+      "site": "Carbonmade",
+      "claimed_check": {
+        "username": "jenny",
+        "expected": "Claimed",
+        "actual": "Available",
+        "http_status": 400,
+        "query_time_ms": 258,
         "context": null
       },
       "unclaimed_check": {
@@ -18,219 +158,199 @@
         "expected": "Available",
         "actual": "Unknown",
         "http_status": null,
-        "query_time_ms": 197,
+        "query_time_ms": 150,
         "context": "Request error"
       },
       "verdict": "Unreachable"
     },
     {
-      "site": "Chollometro",
+      "site": "SEOForum",
       "claimed_check": {
-        "username": "blue",
+        "username": "ko",
         "expected": "Claimed",
         "actual": "Claimed",
         "http_status": 200,
-        "query_time_ms": 543,
+        "query_time_ms": 379,
         "context": null
       },
       "unclaimed_check": {
         "username": "xq7z_k9m2_sherlock_health_test_unclaimed_99",
         "expected": "Available",
         "actual": "Available",
-        "http_status": 410,
-        "query_time_ms": 271,
+        "http_status": 404,
+        "query_time_ms": 83,
         "context": null
       },
       "verdict": "Healthy"
     },
     {
-      "site": "SmugMug",
+      "site": "Holopin",
       "claimed_check": {
-        "username": "winchester",
+        "username": "red",
         "expected": "Claimed",
-        "actual": "Available",
-        "http_status": 403,
-        "query_time_ms": 261,
-        "context": null
-      },
-      "unclaimed_check": {
-        "username": "xq7z_k9m2_sherlock_health_test_unclaimed_99",
-        "expected": "Available",
-        "actual": "Illegal",
-        "http_status": null,
-        "query_time_ms": 0,
-        "context": "Invalid username"
-      },
-      "verdict": "FalseNegative"
-    },
-    {
-      "site": "VirusTotal",
-      "claimed_check": {
-        "username": "blue",
-        "expected": "Claimed",
-        "actual": "Available",
+        "actual": "Claimed",
         "http_status": 400,
-        "query_time_ms": 191,
+        "query_time_ms": 112,
         "context": null
       },
       "unclaimed_check": {
         "username": "xq7z_k9m2_sherlock_health_test_unclaimed_99",
         "expected": "Available",
-        "actual": "Available",
+        "actual": "Claimed",
         "http_status": 400,
-        "query_time_ms": 170,
-        "context": null
-      },
-      "verdict": "FalseNegative"
-    },
-    {
-      "site": "Diskusjon.no",
-      "claimed_check": {
-        "username": "blue",
-        "expected": "Claimed",
-        "actual": "Claimed",
-        "http_status": 413,
-        "query_time_ms": 576,
-        "context": null
-      },
-      "unclaimed_check": {
-        "username": "xq7z_k9m2_sherlock_health_test_unclaimed_99",
-        "expected": "Available",
-        "actual": "Illegal",
-        "http_status": null,
-        "query_time_ms": 0,
-        "context": "Invalid username"
-      },
-      "verdict": "Healthy"
-    },
-    {
-      "site": "phpRU",
-      "claimed_check": {
-        "username": "apple",
-        "expected": "Claimed",
-        "actual": "Claimed",
-        "http_status": 403,
-        "query_time_ms": 1104,
-        "context": null
-      },
-      "unclaimed_check": {
-        "username": "xq7z_k9m2_sherlock_health_test_unclaimed_99",
-        "expected": "Available",
-        "actual": "Claimed",
-        "http_status": 403,
-        "query_time_ms": 247,
+        "query_time_ms": 87,
         "context": null
       },
       "verdict": "FalsePositive"
     },
     {
-      "site": "hackster",
+      "site": "TryHackMe",
       "claimed_check": {
-        "username": "blue",
+        "username": "ashu",
         "expected": "Claimed",
         "actual": "Claimed",
-        "http_status": 200,
-        "query_time_ms": 499,
+        "http_status": 429,
+        "query_time_ms": 96,
         "context": null
       },
       "unclaimed_check": {
         "username": "xq7z_k9m2_sherlock_health_test_unclaimed_99",
         "expected": "Available",
-        "actual": "Available",
-        "http_status": 404,
-        "query_time_ms": 120,
-        "context": null
+        "actual": "Illegal",
+        "http_status": null,
+        "query_time_ms": 0,
+        "context": "Invalid username"
       },
       "verdict": "Healthy"
     },
     {
-      "site": "7Cups",
+      "site": "BoardGameGeek",
       "claimed_check": {
         "username": "blue",
         "expected": "Claimed",
         "actual": "Claimed",
-        "http_status": 200,
-        "query_time_ms": 1049,
-        "context": null
-      },
-      "unclaimed_check": {
-        "username": "xq7z_k9m2_sherlock_health_test_unclaimed_99",
-        "expected": "Available",
-        "actual": "Available",
-        "http_status": 404,
-        "query_time_ms": 470,
-        "context": null
-      },
-      "verdict": "Healthy"
-    },
-    {
-      "site": "Warrior Forum",
-      "claimed_check": {
-        "username": "blue",
-        "expected": "Claimed",
-        "actual": "Claimed",
-        "http_status": 200,
-        "query_time_ms": 389,
-        "context": null
-      },
-      "unclaimed_check": {
-        "username": "xq7z_k9m2_sherlock_health_test_unclaimed_99",
-        "expected": "Available",
-        "actual": "Available",
         "http_status": 400,
-        "query_time_ms": 165,
+        "query_time_ms": 203,
         "context": null
       },
-      "verdict": "Healthy"
+      "unclaimed_check": {
+        "username": "xq7z_k9m2_sherlock_health_test_unclaimed_99",
+        "expected": "Available",
+        "actual": "Claimed",
+        "http_status": 400,
+        "query_time_ms": 137,
+        "context": null
+      },
+      "verdict": "FalsePositive"
     },
     {
-      "site": "Launchpad",
+      "site": "ArtStation",
+      "claimed_check": {
+        "username": "Blue",
+        "expected": "Claimed",
+        "actual": "Available",
+        "http_status": 403,
+        "query_time_ms": 90,
+        "context": null
+      },
+      "unclaimed_check": {
+        "username": "xq7z_k9m2_sherlock_health_test_unclaimed_99",
+        "expected": "Available",
+        "actual": "Available",
+        "http_status": 403,
+        "query_time_ms": 39,
+        "context": null
+      },
+      "verdict": "FalseNegative"
+    },
+    {
+      "site": "Finanzfrage",
+      "claimed_check": {
+        "username": "finanzfrage",
+        "expected": "Claimed",
+        "actual": "Available",
+        "http_status": 403,
+        "query_time_ms": 80,
+        "context": null
+      },
+      "unclaimed_check": {
+        "username": "xq7z_k9m2_sherlock_health_test_unclaimed_99",
+        "expected": "Available",
+        "actual": "Available",
+        "http_status": 403,
+        "query_time_ms": 13,
+        "context": null
+      },
+      "verdict": "FalseNegative"
+    },
+    {
+      "site": "VSCO",
       "claimed_check": {
         "username": "blue",
         "expected": "Claimed",
         "actual": "Available",
-        "http_status": 411,
-        "query_time_ms": 427,
+        "http_status": 403,
+        "query_time_ms": 63,
         "context": null
       },
       "unclaimed_check": {
         "username": "xq7z_k9m2_sherlock_health_test_unclaimed_99",
         "expected": "Available",
         "actual": "Available",
-        "http_status": 411,
-        "query_time_ms": 359,
+        "http_status": 403,
+        "query_time_ms": 9,
         "context": null
       },
       "verdict": "FalseNegative"
     },
     {
-      "site": "Ionic Forum",
+      "site": "ImgUp.cz",
       "claimed_check": {
-        "username": "theblue222",
+        "username": "adam",
         "expected": "Claimed",
         "actual": "Available",
-        "http_status": 413,
-        "query_time_ms": 315,
+        "http_status": 401,
+        "query_time_ms": 1152,
         "context": null
       },
       "unclaimed_check": {
         "username": "xq7z_k9m2_sherlock_health_test_unclaimed_99",
         "expected": "Available",
         "actual": "Available",
-        "http_status": 413,
-        "query_time_ms": 53,
+        "http_status": 401,
+        "query_time_ms": 160,
         "context": null
       },
       "verdict": "FalseNegative"
     },
     {
-      "site": "ObservableHQ",
+      "site": "Sporcle",
       "claimed_check": {
-        "username": "mbostock",
+        "username": "blue",
+        "expected": "Claimed",
+        "actual": "Available",
+        "http_status": 403,
+        "query_time_ms": 29,
+        "context": null
+      },
+      "unclaimed_check": {
+        "username": "xq7z_k9m2_sherlock_health_test_unclaimed_99",
+        "expected": "Available",
+        "actual": "Available",
+        "http_status": 403,
+        "query_time_ms": 29,
+        "context": null
+      },
+      "verdict": "FalseNegative"
+    },
+    {
+      "site": "Mydramalist",
+      "claimed_check": {
+        "username": "elhadidy12398",
         "expected": "Claimed",
         "actual": "Claimed",
         "http_status": 200,
-        "query_time_ms": 615,
+        "query_time_ms": 490,
         "context": null
       },
       "unclaimed_check": {
@@ -238,10 +358,330 @@
         "expected": "Available",
         "actual": "Available",
         "http_status": 404,
-        "query_time_ms": 379,
+        "query_time_ms": 177,
         "context": null
       },
       "verdict": "Healthy"
+    },
+    {
+      "site": "WICG Forum",
+      "claimed_check": {
+        "username": "stefano",
+        "expected": "Claimed",
+        "actual": "Available",
+        "http_status": 404,
+        "query_time_ms": 107,
+        "context": null
+      },
+      "unclaimed_check": {
+        "username": "xq7z_k9m2_sherlock_health_test_unclaimed_99",
+        "expected": "Available",
+        "actual": "Illegal",
+        "http_status": null,
+        "query_time_ms": 0,
+        "context": "Invalid username"
+      },
+      "verdict": "FalseNegative"
+    },
+    {
+      "site": "BioHacking",
+      "claimed_check": {
+        "username": "blue",
+        "expected": "Claimed",
+        "actual": "Available",
+        "http_status": 413,
+        "query_time_ms": 294,
+        "context": null
+      },
+      "unclaimed_check": {
+        "username": "xq7z_k9m2_sherlock_health_test_unclaimed_99",
+        "expected": "Available",
+        "actual": "Available",
+        "http_status": 413,
+        "query_time_ms": 76,
+        "context": null
+      },
+      "verdict": "FalseNegative"
+    },
+    {
+      "site": "CTAN",
+      "claimed_check": {
+        "username": "briggs",
+        "expected": "Claimed",
+        "actual": "Claimed",
+        "http_status": 200,
+        "query_time_ms": 837,
+        "context": null
+      },
+      "unclaimed_check": {
+        "username": "xq7z_k9m2_sherlock_health_test_unclaimed_99",
+        "expected": "Available",
+        "actual": "Available",
+        "http_status": 404,
+        "query_time_ms": 166,
+        "context": null
+      },
+      "verdict": "Healthy"
+    },
+    {
+      "site": "Atcoder",
+      "claimed_check": {
+        "username": "ksun48",
+        "expected": "Claimed",
+        "actual": "Available",
+        "http_status": 403,
+        "query_time_ms": 128,
+        "context": null
+      },
+      "unclaimed_check": {
+        "username": "xq7z_k9m2_sherlock_health_test_unclaimed_99",
+        "expected": "Available",
+        "actual": "Available",
+        "http_status": 403,
+        "query_time_ms": 115,
+        "context": null
+      },
+      "verdict": "FalseNegative"
+    },
+    {
+      "site": "Sportlerfrage",
+      "claimed_check": {
+        "username": "sportlerfrage",
+        "expected": "Claimed",
+        "actual": "Available",
+        "http_status": 403,
+        "query_time_ms": 39,
+        "context": null
+      },
+      "unclaimed_check": {
+        "username": "xq7z_k9m2_sherlock_health_test_unclaimed_99",
+        "expected": "Available",
+        "actual": "Available",
+        "http_status": 403,
+        "query_time_ms": 15,
+        "context": null
+      },
+      "verdict": "FalseNegative"
+    },
+    {
+      "site": "Xbox Gamertag",
+      "claimed_check": {
+        "username": "red",
+        "expected": "Claimed",
+        "actual": "Available",
+        "http_status": 403,
+        "query_time_ms": 81,
+        "context": null
+      },
+      "unclaimed_check": {
+        "username": "xq7z_k9m2_sherlock_health_test_unclaimed_99",
+        "expected": "Available",
+        "actual": "Available",
+        "http_status": 403,
+        "query_time_ms": 15,
+        "context": null
+      },
+      "verdict": "FalseNegative"
+    },
+    {
+      "site": "FortniteTracker",
+      "claimed_check": {
+        "username": "blue",
+        "expected": "Claimed",
+        "actual": "Available",
+        "http_status": 403,
+        "query_time_ms": 78,
+        "context": null
+      },
+      "unclaimed_check": {
+        "username": "xq7z_k9m2_sherlock_health_test_unclaimed_99",
+        "expected": "Available",
+        "actual": "Available",
+        "http_status": 403,
+        "query_time_ms": 13,
+        "context": null
+      },
+      "verdict": "FalseNegative"
+    },
+    {
+      "site": "CryptoHack",
+      "claimed_check": {
+        "username": "blue",
+        "expected": "Claimed",
+        "actual": "Claimed",
+        "http_status": 200,
+        "query_time_ms": 735,
+        "context": null
+      },
+      "unclaimed_check": {
+        "username": "xq7z_k9m2_sherlock_health_test_unclaimed_99",
+        "expected": "Available",
+        "actual": "Claimed",
+        "http_status": 200,
+        "query_time_ms": 1171,
+        "context": null
+      },
+      "verdict": "FalsePositive"
+    },
+    {
+      "site": "IRC-Galleria",
+      "claimed_check": {
+        "username": "appas",
+        "expected": "Claimed",
+        "actual": "Available",
+        "http_status": 404,
+        "query_time_ms": 89,
+        "context": null
+      },
+      "unclaimed_check": {
+        "username": "xq7z_k9m2_sherlock_health_test_unclaimed_99",
+        "expected": "Available",
+        "actual": "Available",
+        "http_status": 404,
+        "query_time_ms": 4,
+        "context": null
+      },
+      "verdict": "FalseNegative"
+    },
+    {
+      "site": "toster",
+      "claimed_check": {
+        "username": "adam",
+        "expected": "Claimed",
+        "actual": "Available",
+        "http_status": 404,
+        "query_time_ms": 1202,
+        "context": null
+      },
+      "unclaimed_check": {
+        "username": "xq7z_k9m2_sherlock_health_test_unclaimed_99",
+        "expected": "Available",
+        "actual": "Available",
+        "http_status": 404,
+        "query_time_ms": 208,
+        "context": null
+      },
+      "verdict": "FalseNegative"
+    },
+    {
+      "site": "Wikipedia",
+      "claimed_check": {
+        "username": "Hoadlck",
+        "expected": "Claimed",
+        "actual": "Claimed",
+        "http_status": 200,
+        "query_time_ms": 312,
+        "context": null
+      },
+      "unclaimed_check": {
+        "username": "xq7z_k9m2_sherlock_health_test_unclaimed_99",
+        "expected": "Available",
+        "actual": "Available",
+        "http_status": 200,
+        "query_time_ms": 147,
+        "context": null
+      },
+      "verdict": "Healthy"
+    },
+    {
+      "site": "VK",
+      "claimed_check": {
+        "username": "brown",
+        "expected": "Claimed",
+        "actual": "Available",
+        "http_status": 413,
+        "query_time_ms": 747,
+        "context": null
+      },
+      "unclaimed_check": {
+        "username": "xq7z_k9m2_sherlock_health_test_unclaimed_99",
+        "expected": "Available",
+        "actual": "Available",
+        "http_status": 413,
+        "query_time_ms": 188,
+        "context": null
+      },
+      "verdict": "FalseNegative"
+    },
+    {
+      "site": "Minecraft",
+      "claimed_check": {
+        "username": "blue",
+        "expected": "Claimed",
+        "actual": "Claimed",
+        "http_status": 200,
+        "query_time_ms": 93,
+        "context": null
+      },
+      "unclaimed_check": {
+        "username": "xq7z_k9m2_sherlock_health_test_unclaimed_99",
+        "expected": "Available",
+        "actual": "Illegal",
+        "http_status": null,
+        "query_time_ms": 0,
+        "context": "Invalid username"
+      },
+      "verdict": "Healthy"
+    },
+    {
+      "site": "Fandom",
+      "claimed_check": {
+        "username": "Jungypoo",
+        "expected": "Claimed",
+        "actual": "Available",
+        "http_status": 403,
+        "query_time_ms": 20,
+        "context": null
+      },
+      "unclaimed_check": {
+        "username": "xq7z_k9m2_sherlock_health_test_unclaimed_99",
+        "expected": "Available",
+        "actual": "Available",
+        "http_status": 403,
+        "query_time_ms": 13,
+        "context": null
+      },
+      "verdict": "FalseNegative"
+    },
+    {
+      "site": "Blitz Tactics",
+      "claimed_check": {
+        "username": "Lance5500",
+        "expected": "Claimed",
+        "actual": "Claimed",
+        "http_status": 200,
+        "query_time_ms": 454,
+        "context": null
+      },
+      "unclaimed_check": {
+        "username": "xq7z_k9m2_sherlock_health_test_unclaimed_99",
+        "expected": "Available",
+        "actual": "Available",
+        "http_status": 404,
+        "query_time_ms": 67,
+        "context": null
+      },
+      "verdict": "Healthy"
+    },
+    {
+      "site": "HackerSploit",
+      "claimed_check": {
+        "username": "hackersploit",
+        "expected": "Claimed",
+        "actual": "Available",
+        "http_status": 403,
+        "query_time_ms": 41,
+        "context": null
+      },
+      "unclaimed_check": {
+        "username": "xq7z_k9m2_sherlock_health_test_unclaimed_99",
+        "expected": "Available",
+        "actual": "Available",
+        "http_status": 403,
+        "query_time_ms": 14,
+        "context": null
+      },
+      "verdict": "FalseNegative"
     },
     {
       "site": "note",
@@ -250,7 +690,7 @@
         "expected": "Claimed",
         "actual": "Available",
         "http_status": 403,
-        "query_time_ms": 164,
+        "query_time_ms": 19,
         "context": null
       },
       "unclaimed_check": {
@@ -258,139 +698,59 @@
         "expected": "Available",
         "actual": "Available",
         "http_status": 403,
-        "query_time_ms": 103,
+        "query_time_ms": 8,
         "context": null
       },
       "verdict": "FalseNegative"
     },
     {
-      "site": "PyPi",
+      "site": "Clozemaster",
       "claimed_check": {
-        "username": "Blue",
+        "username": "green",
+        "expected": "Claimed",
+        "actual": "Claimed",
+        "http_status": 200,
+        "query_time_ms": 345,
+        "context": null
+      },
+      "unclaimed_check": {
+        "username": "xq7z_k9m2_sherlock_health_test_unclaimed_99",
+        "expected": "Available",
+        "actual": "Claimed",
+        "http_status": 200,
+        "query_time_ms": 182,
+        "context": null
+      },
+      "verdict": "FalsePositive"
+    },
+    {
+      "site": "Ask Fedora",
+      "claimed_check": {
+        "username": "red",
         "expected": "Claimed",
         "actual": "Available",
-        "http_status": 404,
-        "query_time_ms": 168,
+        "http_status": 413,
+        "query_time_ms": 1595,
         "context": null
       },
       "unclaimed_check": {
         "username": "xq7z_k9m2_sherlock_health_test_unclaimed_99",
         "expected": "Available",
         "actual": "Available",
-        "http_status": 404,
-        "query_time_ms": 97,
+        "http_status": 413,
+        "query_time_ms": 48,
         "context": null
       },
       "verdict": "FalseNegative"
     },
     {
-      "site": "Jellyfin Weblate",
-      "claimed_check": {
-        "username": "EraYaN",
-        "expected": "Claimed",
-        "actual": "Claimed",
-        "http_status": 200,
-        "query_time_ms": 653,
-        "context": null
-      },
-      "unclaimed_check": {
-        "username": "xq7z_k9m2_sherlock_health_test_unclaimed_99",
-        "expected": "Available",
-        "actual": "Available",
-        "http_status": 404,
-        "query_time_ms": 53,
-        "context": null
-      },
-      "verdict": "Healthy"
-    },
-    {
-      "site": "Wix",
-      "claimed_check": {
-        "username": "support",
-        "expected": "Claimed",
-        "actual": "Available",
-        "http_status": 400,
-        "query_time_ms": 379,
-        "context": null
-      },
-      "unclaimed_check": {
-        "username": "xq7z_k9m2_sherlock_health_test_unclaimed_99",
-        "expected": "Available",
-        "actual": "Unknown",
-        "http_status": null,
-        "query_time_ms": 145,
-        "context": "Request error"
-      },
-      "verdict": "Unreachable"
-    },
-    {
-      "site": "PromoDJ",
-      "claimed_check": {
-        "username": "blue",
-        "expected": "Claimed",
-        "actual": "Claimed",
-        "http_status": 200,
-        "query_time_ms": 2396,
-        "context": null
-      },
-      "unclaimed_check": {
-        "username": "xq7z_k9m2_sherlock_health_test_unclaimed_99",
-        "expected": "Available",
-        "actual": "Available",
-        "http_status": 404,
-        "query_time_ms": 408,
-        "context": null
-      },
-      "verdict": "Healthy"
-    },
-    {
-      "site": "Cplusplus",
-      "claimed_check": {
-        "username": "mbozzi",
-        "expected": "Claimed",
-        "actual": "Claimed",
-        "http_status": 200,
-        "query_time_ms": 313,
-        "context": null
-      },
-      "unclaimed_check": {
-        "username": "xq7z_k9m2_sherlock_health_test_unclaimed_99",
-        "expected": "Available",
-        "actual": "Available",
-        "http_status": 200,
-        "query_time_ms": 79,
-        "context": null
-      },
-      "verdict": "Healthy"
-    },
-    {
-      "site": "Chaos",
-      "claimed_check": {
-        "username": "ordnung",
-        "expected": "Claimed",
-        "actual": "Claimed",
-        "http_status": 200,
-        "query_time_ms": 940,
-        "context": null
-      },
-      "unclaimed_check": {
-        "username": "xq7z_k9m2_sherlock_health_test_unclaimed_99",
-        "expected": "Available",
-        "actual": "Available",
-        "http_status": 404,
-        "query_time_ms": 131,
-        "context": null
-      },
-      "verdict": "Healthy"
-    },
-    {
-      "site": "MyMiniFactory",
+      "site": "PSNProfiles.com",
       "claimed_check": {
         "username": "blue",
         "expected": "Claimed",
         "actual": "Available",
         "http_status": 403,
-        "query_time_ms": 131,
+        "query_time_ms": 81,
         "context": null
       },
       "unclaimed_check": {
@@ -398,99 +758,59 @@
         "expected": "Available",
         "actual": "Available",
         "http_status": 403,
-        "query_time_ms": 65,
+        "query_time_ms": 12,
         "context": null
       },
       "verdict": "FalseNegative"
     },
     {
-      "site": "Venmo",
-      "claimed_check": {
-        "username": "jenny",
-        "expected": "Claimed",
-        "actual": "Claimed",
-        "http_status": 200,
-        "query_time_ms": 385,
-        "context": null
-      },
-      "unclaimed_check": {
-        "username": "xq7z_k9m2_sherlock_health_test_unclaimed_99",
-        "expected": "Available",
-        "actual": "Available",
-        "http_status": 404,
-        "query_time_ms": 220,
-        "context": null
-      },
-      "verdict": "Healthy"
-    },
-    {
-      "site": "Topcoder",
-      "claimed_check": {
-        "username": "USER",
-        "expected": "Claimed",
-        "actual": "Available",
-        "http_status": 503,
-        "query_time_ms": 223,
-        "context": null
-      },
-      "unclaimed_check": {
-        "username": "xq7z_k9m2_sherlock_health_test_unclaimed_99",
-        "expected": "Available",
-        "actual": "Available",
-        "http_status": 503,
-        "query_time_ms": 85,
-        "context": null
-      },
-      "verdict": "FalseNegative"
-    },
-    {
-      "site": "leasehackr",
+      "site": "GaiaOnline",
       "claimed_check": {
         "username": "adam",
         "expected": "Claimed",
-        "actual": "Available",
-        "http_status": 413,
-        "query_time_ms": 209,
+        "actual": "Claimed",
+        "http_status": 200,
+        "query_time_ms": 178,
         "context": null
       },
       "unclaimed_check": {
         "username": "xq7z_k9m2_sherlock_health_test_unclaimed_99",
         "expected": "Available",
         "actual": "Available",
-        "http_status": 413,
-        "query_time_ms": 42,
+        "http_status": 200,
+        "query_time_ms": 108,
         "context": null
       },
-      "verdict": "FalseNegative"
+      "verdict": "Healthy"
     },
     {
-      "site": "Ifunny",
-      "claimed_check": {
-        "username": "agua",
-        "expected": "Claimed",
-        "actual": "Available",
-        "http_status": 400,
-        "query_time_ms": 203,
-        "context": null
-      },
-      "unclaimed_check": {
-        "username": "xq7z_k9m2_sherlock_health_test_unclaimed_99",
-        "expected": "Available",
-        "actual": "Available",
-        "http_status": 400,
-        "query_time_ms": 80,
-        "context": null
-      },
-      "verdict": "FalseNegative"
-    },
-    {
-      "site": "DEV Community",
+      "site": "LemmyWorld",
       "claimed_check": {
         "username": "blue",
         "expected": "Claimed",
         "actual": "Claimed",
+        "http_status": 403,
+        "query_time_ms": 35,
+        "context": null
+      },
+      "unclaimed_check": {
+        "username": "xq7z_k9m2_sherlock_health_test_unclaimed_99",
+        "expected": "Available",
+        "actual": "Claimed",
+        "http_status": 403,
+        "query_time_ms": 14,
+        "context": null
+      },
+      "verdict": "FalsePositive"
+    },
+    {
+      "site": "Warframe Market",
+      "claimed_check": {
+        "username": "kaiallalone",
+        "expected": "Claimed",
+        "actual": "Claimed",
         "http_status": 200,
-        "query_time_ms": 290,
+        "query_time_ms": 172,
         "context": null
       },
       "unclaimed_check": {
@@ -498,39 +818,59 @@
         "expected": "Available",
         "actual": "Available",
         "http_status": 404,
-        "query_time_ms": 95,
+        "query_time_ms": 205,
         "context": null
       },
       "verdict": "Healthy"
     },
     {
-      "site": "Twitch",
+      "site": "SoundCloud",
       "claimed_check": {
-        "username": "xqc",
+        "username": "blue",
         "expected": "Claimed",
-        "actual": "Claimed",
-        "http_status": 200,
-        "query_time_ms": 525,
+        "actual": "Available",
+        "http_status": 403,
+        "query_time_ms": 42,
         "context": null
       },
       "unclaimed_check": {
         "username": "xq7z_k9m2_sherlock_health_test_unclaimed_99",
         "expected": "Available",
         "actual": "Available",
-        "http_status": 200,
-        "query_time_ms": 43,
+        "http_status": 403,
+        "query_time_ms": 39,
         "context": null
       },
-      "verdict": "Healthy"
+      "verdict": "FalseNegative"
     },
     {
-      "site": "Mamot",
+      "site": "freecodecamp",
       "claimed_check": {
-        "username": "anciensEnssat",
+        "username": "naveennamani",
         "expected": "Claimed",
-        "actual": "Claimed",
-        "http_status": 200,
-        "query_time_ms": 692,
+        "actual": "Available",
+        "http_status": 404,
+        "query_time_ms": 263,
+        "context": null
+      },
+      "unclaimed_check": {
+        "username": "xq7z_k9m2_sherlock_health_test_unclaimed_99",
+        "expected": "Available",
+        "actual": "Available",
+        "http_status": 404,
+        "query_time_ms": 82,
+        "context": null
+      },
+      "verdict": "FalseNegative"
+    },
+    {
+      "site": "SmugMug",
+      "claimed_check": {
+        "username": "winchester",
+        "expected": "Claimed",
+        "actual": "Available",
+        "http_status": 403,
+        "query_time_ms": 40,
         "context": null
       },
       "unclaimed_check": {
@@ -541,156 +881,16 @@
         "query_time_ms": 0,
         "context": "Invalid username"
       },
-      "verdict": "Healthy"
+      "verdict": "FalseNegative"
     },
     {
-      "site": "PocketStars",
-      "claimed_check": {
-        "username": "hacker",
-        "expected": "Claimed",
-        "actual": "Claimed",
-        "http_status": 400,
-        "query_time_ms": 614,
-        "context": null
-      },
-      "unclaimed_check": {
-        "username": "xq7z_k9m2_sherlock_health_test_unclaimed_99",
-        "expected": "Available",
-        "actual": "Claimed",
-        "http_status": 400,
-        "query_time_ms": 245,
-        "context": null
-      },
-      "verdict": "FalsePositive"
-    },
-    {
-      "site": "Hubski",
+      "site": "kwork",
       "claimed_check": {
         "username": "blue",
         "expected": "Claimed",
         "actual": "Claimed",
         "http_status": 200,
-        "query_time_ms": 243,
-        "context": null
-      },
-      "unclaimed_check": {
-        "username": "xq7z_k9m2_sherlock_health_test_unclaimed_99",
-        "expected": "Available",
-        "actual": "Claimed",
-        "http_status": 200,
-        "query_time_ms": 62,
-        "context": null
-      },
-      "verdict": "FalsePositive"
-    },
-    {
-      "site": "Codepen",
-      "claimed_check": {
-        "username": "blue",
-        "expected": "Claimed",
-        "actual": "Available",
-        "http_status": 403,
-        "query_time_ms": 101,
-        "context": null
-      },
-      "unclaimed_check": {
-        "username": "xq7z_k9m2_sherlock_health_test_unclaimed_99",
-        "expected": "Available",
-        "actual": "Available",
-        "http_status": 403,
-        "query_time_ms": 67,
-        "context": null
-      },
-      "verdict": "FalseNegative"
-    },
-    {
-      "site": "ProductHunt",
-      "claimed_check": {
-        "username": "jenny",
-        "expected": "Claimed",
-        "actual": "Available",
-        "http_status": 403,
-        "query_time_ms": 99,
-        "context": null
-      },
-      "unclaimed_check": {
-        "username": "xq7z_k9m2_sherlock_health_test_unclaimed_99",
-        "expected": "Available",
-        "actual": "Available",
-        "http_status": 403,
-        "query_time_ms": 51,
-        "context": null
-      },
-      "verdict": "FalseNegative"
-    },
-    {
-      "site": "Gamespot",
-      "claimed_check": {
-        "username": "blue",
-        "expected": "Claimed",
-        "actual": "Available",
-        "http_status": 403,
-        "query_time_ms": 216,
-        "context": null
-      },
-      "unclaimed_check": {
-        "username": "xq7z_k9m2_sherlock_health_test_unclaimed_99",
-        "expected": "Available",
-        "actual": "Available",
-        "http_status": 403,
-        "query_time_ms": 44,
-        "context": null
-      },
-      "verdict": "FalseNegative"
-    },
-    {
-      "site": "LottieFiles",
-      "claimed_check": {
-        "username": "lottiefiles",
-        "expected": "Claimed",
-        "actual": "Available",
-        "http_status": 403,
-        "query_time_ms": 189,
-        "context": null
-      },
-      "unclaimed_check": {
-        "username": "xq7z_k9m2_sherlock_health_test_unclaimed_99",
-        "expected": "Available",
-        "actual": "Available",
-        "http_status": 403,
-        "query_time_ms": 60,
-        "context": null
-      },
-      "verdict": "FalseNegative"
-    },
-    {
-      "site": "MMORPG Forum",
-      "claimed_check": {
-        "username": "goku",
-        "expected": "Claimed",
-        "actual": "Available",
-        "http_status": 403,
-        "query_time_ms": 207,
-        "context": null
-      },
-      "unclaimed_check": {
-        "username": "xq7z_k9m2_sherlock_health_test_unclaimed_99",
-        "expected": "Available",
-        "actual": "Available",
-        "http_status": 403,
-        "query_time_ms": 63,
-        "context": null
-      },
-      "verdict": "FalseNegative"
-    },
-    {
-      "site": "Credly",
-      "claimed_check": {
-        "username": "credly",
-        "expected": "Claimed",
-        "actual": "Claimed",
-        "http_status": 200,
-        "query_time_ms": 525,
+        "query_time_ms": 920,
         "context": null
       },
       "unclaimed_check": {
@@ -698,27 +898,7 @@
         "expected": "Available",
         "actual": "Available",
         "http_status": 404,
-        "query_time_ms": 195,
-        "context": null
-      },
-      "verdict": "Healthy"
-    },
-    {
-      "site": "Pastebin",
-      "claimed_check": {
-        "username": "blue",
-        "expected": "Claimed",
-        "actual": "Claimed",
-        "http_status": 200,
-        "query_time_ms": 419,
-        "context": null
-      },
-      "unclaimed_check": {
-        "username": "xq7z_k9m2_sherlock_health_test_unclaimed_99",
-        "expected": "Available",
-        "actual": "Available",
-        "http_status": 404,
-        "query_time_ms": 181,
+        "query_time_ms": 303,
         "context": null
       },
       "verdict": "Healthy"
@@ -730,7 +910,7 @@
         "expected": "Claimed",
         "actual": "Available",
         "http_status": 413,
-        "query_time_ms": 280,
+        "query_time_ms": 569,
         "context": null
       },
       "unclaimed_check": {
@@ -738,79 +918,39 @@
         "expected": "Available",
         "actual": "Available",
         "http_status": 413,
-        "query_time_ms": 149,
+        "query_time_ms": 139,
         "context": null
       },
       "verdict": "FalseNegative"
     },
     {
-      "site": "Codecademy",
+      "site": "couchsurfing",
       "claimed_check": {
         "username": "blue",
         "expected": "Claimed",
-        "actual": "Claimed",
-        "http_status": 200,
-        "query_time_ms": 514,
-        "context": null
-      },
-      "unclaimed_check": {
-        "username": "xq7z_k9m2_sherlock_health_test_unclaimed_99",
-        "expected": "Available",
         "actual": "Available",
-        "http_status": 200,
-        "query_time_ms": 246,
-        "context": null
-      },
-      "verdict": "Healthy"
-    },
-    {
-      "site": "LemmyWorld",
-      "claimed_check": {
-        "username": "blue",
-        "expected": "Claimed",
-        "actual": "Claimed",
         "http_status": 400,
-        "query_time_ms": 271,
+        "query_time_ms": 210,
         "context": null
       },
       "unclaimed_check": {
         "username": "xq7z_k9m2_sherlock_health_test_unclaimed_99",
         "expected": "Available",
-        "actual": "Claimed",
+        "actual": "Available",
         "http_status": 400,
-        "query_time_ms": 182,
-        "context": null
-      },
-      "verdict": "FalsePositive"
-    },
-    {
-      "site": "jeuxvideo",
-      "claimed_check": {
-        "username": "adam",
-        "expected": "Claimed",
-        "actual": "Available",
-        "http_status": 403,
-        "query_time_ms": 187,
-        "context": null
-      },
-      "unclaimed_check": {
-        "username": "xq7z_k9m2_sherlock_health_test_unclaimed_99",
-        "expected": "Available",
-        "actual": "Available",
-        "http_status": 403,
-        "query_time_ms": 188,
+        "query_time_ms": 152,
         "context": null
       },
       "verdict": "FalseNegative"
     },
     {
-      "site": "Giant Bomb",
+      "site": "RoyalCams",
       "claimed_check": {
-        "username": "bob",
+        "username": "asuna-black",
         "expected": "Claimed",
         "actual": "Available",
         "http_status": 403,
-        "query_time_ms": 380,
+        "query_time_ms": 449,
         "context": null
       },
       "unclaimed_check": {
@@ -818,190 +958,50 @@
         "expected": "Available",
         "actual": "Available",
         "http_status": 403,
-        "query_time_ms": 79,
+        "query_time_ms": 144,
         "context": null
       },
       "verdict": "FalseNegative"
     },
     {
-      "site": "Trello",
+      "site": "DMOJ",
       "claimed_check": {
-        "username": "blue",
+        "username": "junferno",
         "expected": "Claimed",
         "actual": "Claimed",
         "http_status": 403,
-        "query_time_ms": 160,
-        "context": null
-      },
-      "unclaimed_check": {
-        "username": "xq7z_k9m2_sherlock_health_test_unclaimed_99",
-        "expected": "Available",
-        "actual": "Claimed",
-        "http_status": 403,
-        "query_time_ms": 176,
-        "context": null
-      },
-      "verdict": "FalsePositive"
-    },
-    {
-      "site": "Ruby Forums",
-      "claimed_check": {
-        "username": "rishard",
-        "expected": "Claimed",
-        "actual": "Claimed",
-        "http_status": 413,
-        "query_time_ms": 398,
-        "context": null
-      },
-      "unclaimed_check": {
-        "username": "xq7z_k9m2_sherlock_health_test_unclaimed_99",
-        "expected": "Available",
-        "actual": "Claimed",
-        "http_status": 413,
-        "query_time_ms": 150,
-        "context": null
-      },
-      "verdict": "FalsePositive"
-    },
-    {
-      "site": "Autofrage",
-      "claimed_check": {
-        "username": "autofrage",
-        "expected": "Claimed",
-        "actual": "Available",
-        "http_status": 400,
-        "query_time_ms": 511,
-        "context": null
-      },
-      "unclaimed_check": {
-        "username": "xq7z_k9m2_sherlock_health_test_unclaimed_99",
-        "expected": "Available",
-        "actual": "Available",
-        "http_status": 400,
-        "query_time_ms": 126,
-        "context": null
-      },
-      "verdict": "FalseNegative"
-    },
-    {
-      "site": "Heavy-R",
-      "claimed_check": {
-        "username": "kilroy222",
-        "expected": "Claimed",
-        "actual": "Claimed",
-        "http_status": 403,
-        "query_time_ms": 184,
-        "context": null
-      },
-      "unclaimed_check": {
-        "username": "xq7z_k9m2_sherlock_health_test_unclaimed_99",
-        "expected": "Available",
-        "actual": "Claimed",
-        "http_status": 403,
-        "query_time_ms": 58,
-        "context": null
-      },
-      "verdict": "FalsePositive"
-    },
-    {
-      "site": "Spells8",
-      "claimed_check": {
-        "username": "susurrus",
-        "expected": "Claimed",
-        "actual": "Available",
-        "http_status": 413,
-        "query_time_ms": 171,
-        "context": null
-      },
-      "unclaimed_check": {
-        "username": "xq7z_k9m2_sherlock_health_test_unclaimed_99",
-        "expected": "Available",
-        "actual": "Available",
-        "http_status": 413,
         "query_time_ms": 43,
         "context": null
       },
-      "verdict": "FalseNegative"
-    },
-    {
-      "site": "Pepperdeals",
-      "claimed_check": {
-        "username": "Mark",
-        "expected": "Claimed",
-        "actual": "Claimed",
-        "http_status": 200,
-        "query_time_ms": 810,
-        "context": null
-      },
-      "unclaimed_check": {
-        "username": "xq7z_k9m2_sherlock_health_test_unclaimed_99",
-        "expected": "Available",
-        "actual": "Available",
-        "http_status": 410,
-        "query_time_ms": 540,
-        "context": null
-      },
-      "verdict": "Healthy"
-    },
-    {
-      "site": "jbzd.com.pl",
-      "claimed_check": {
-        "username": "blue",
-        "expected": "Claimed",
-        "actual": "Available",
-        "http_status": 400,
-        "query_time_ms": 422,
-        "context": null
-      },
-      "unclaimed_check": {
-        "username": "xq7z_k9m2_sherlock_health_test_unclaimed_99",
-        "expected": "Available",
-        "actual": "Available",
-        "http_status": 400,
-        "query_time_ms": 123,
-        "context": null
-      },
-      "verdict": "FalseNegative"
-    },
-    {
-      "site": "Codolio",
-      "claimed_check": {
-        "username": "testuser",
-        "expected": "Claimed",
-        "actual": "Claimed",
-        "http_status": 200,
-        "query_time_ms": 216,
-        "context": null
-      },
-      "unclaimed_check": {
-        "username": "xq7z_k9m2_sherlock_health_test_unclaimed_99",
-        "expected": "Available",
-        "actual": "Illegal",
-        "http_status": null,
-        "query_time_ms": 0,
-        "context": "Invalid username"
-      },
-      "verdict": "Healthy"
-    },
-    {
-      "site": "SlideShare",
-      "claimed_check": {
-        "username": "blue",
-        "expected": "Claimed",
-        "actual": "Claimed",
-        "http_status": 200,
-        "query_time_ms": 125,
-        "context": null
-      },
       "unclaimed_check": {
         "username": "xq7z_k9m2_sherlock_health_test_unclaimed_99",
         "expected": "Available",
         "actual": "Claimed",
-        "http_status": 200,
-        "query_time_ms": 41,
+        "http_status": 403,
+        "query_time_ms": 16,
         "context": null
       },
       "verdict": "FalsePositive"
+    },
+    {
+      "site": "Trakt",
+      "claimed_check": {
+        "username": "blue",
+        "expected": "Claimed",
+        "actual": "Available",
+        "http_status": 500,
+        "query_time_ms": 252,
+        "context": null
+      },
+      "unclaimed_check": {
+        "username": "xq7z_k9m2_sherlock_health_test_unclaimed_99",
+        "expected": "Available",
+        "actual": "Available",
+        "http_status": 500,
+        "query_time_ms": 110,
+        "context": null
+      },
+      "verdict": "FalseNegative"
     }
   ]
 }
