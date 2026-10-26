@@ -17,7 +17,13 @@ pub enum QueryError {
     #[error("Request error")]
     RequestError,
     #[error(transparent)]
-    RegexError(#[from] fancy_regex::Error),
+    RegexError(#[from] Box<fancy_regex::Error>),
+}
+
+impl From<fancy_regex::Error> for QueryError {
+    fn from(error: fancy_regex::Error) -> Self {
+        Self::RegexError(Box::new(error))
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
@@ -145,4 +151,19 @@ async fn check_user_at_site(
     )
     .await
     .map_err(|_| QueryError::RequestError)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn regex_error_conversion_preserves_message() {
+        let error = Regex::new("(").unwrap_err();
+        let message = error.to_string();
+        let query_error = QueryError::from(error);
+
+        assert!(matches!(query_error, QueryError::RegexError(_)));
+        assert_eq!(query_error.to_string(), message);
+    }
 }
